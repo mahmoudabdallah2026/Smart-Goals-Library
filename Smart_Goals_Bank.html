@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART Goals Lab — 100 Worked Examples</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --board:#24403C;
+  --board-deep:#1B312E;
+  --paper:#F8F3E8;
+  --paper-dim:#EFE8D8;
+  --ink:#23291F;
+  --ink-soft:#5B6457;
+  --rule:#D9CFB9;
+  --measurable:#2F6F4E;
+  --measurable-bg:#DCEEDD;
+  --timebound:#B5651D;
+  --timebound-bg:#F6E3CC;
+  --accent:#D9A544;
+  --radius:3px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--board);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(255,255,255,0.04), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(255,255,255,0.03), transparent 45%);
+  color:var(--ink);
+  font-family:'Inter', sans-serif;
+  min-height:100vh;
+}
+
+.page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:36px 24px 80px;
+}
+
+/* ---------- Header ---------- */
+header.top{
+  color:var(--paper);
+  margin-bottom:28px;
+}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:0 0 10px;
+}
+h1{
+  font-family:'Fraunces', serif;
+  font-weight:700;
+  font-size:clamp(34px, 6vw, 56px);
+  line-height:1.05;
+  margin:0 0 14px;
+  letter-spacing:-0.01em;
+}
+h1 em{
+  font-style:italic;
+  color:var(--accent);
+}
+.lede{
+  font-family:'Source Serif 4', serif;
+  font-size:17px;
+  line-height:1.6;
+  color:#D9DED8;
+  max-width:680px;
+  margin:0 0 22px;
+}
+
+.statline{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+  border-top:1px solid rgba(255,255,255,0.18);
+  border-bottom:1px solid rgba(255,255,255,0.18);
+  padding:14px 0;
+}
+.stat{
+  display:flex;
+  flex-direction:column;
+}
+.stat .num{
+  font-family:'Fraunces', serif;
+  font-size:28px;
+  font-weight:600;
+  color:var(--paper);
+}
+.stat .lbl{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:#A9B7AE;
+  margin-top:2px;
+}
+
+/* ---------- Legend / key card ---------- */
+.legend{
+  background:var(--paper);
+  border-radius:var(--radius);
+  padding:16px 20px;
+  margin:24px 0 26px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:22px;
+  align-items:center;
+  box-shadow:0 8px 24px rgba(0,0,0,0.18);
+}
+.legend-title{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:14px;
+  white-space:nowrap;
+}
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--ink-soft);
+}
+.swatch{
+  display:inline-block;
+  width:14px;height:14px;
+  border-radius:2px;
+}
+.swatch.measurable{background:var(--measurable-bg); border:1px solid var(--measurable);}
+.swatch.timebound{background:var(--timebound-bg); border:1px solid var(--timebound);}
+
+.legend-toggle{
+  margin-left:auto;
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  background:none;
+  border:1px solid var(--rule);
+  border-radius:var(--radius);
+  padding:6px 10px;
+  cursor:pointer;
+  color:var(--ink-soft);
+}
+.legend-toggle:hover{ border-color:var(--ink-soft); color:var(--ink); }
+
+#smartExplainer{
+  background:var(--paper);
+  border-radius:var(--radius);
+  padding:18px 20px;
+  margin-bottom:26px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.18);
+}
+#smartExplainer h2{
+  font-family:'Fraunces', serif;
+  font-size:18px;
+  margin:0 0 12px;
+}
+.smart-grid{
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:12px;
+}
+.smart-grid div{
+  border-left:3px solid var(--accent);
+  padding:0 0 0 10px;
+}
+.smart-grid b{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.08em;
+  display:block;
+  color:var(--measurable);
+  margin-bottom:4px;
+}
+.smart-grid p{
+  margin:0;
+  font-size:13px;
+  line-height:1.5;
+  color:var(--ink-soft);
+}
+@media (max-width:900px){
+  .smart-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:520px){
+  .smart-grid{ grid-template-columns:1fr; }
+}
+
+/* ---------- Controls ---------- */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  margin-bottom:22px;
+}
+#searchInput{
+  flex:1 1 220px;
+  font-family:'Inter', sans-serif;
+  font-size:14px;
+  padding:11px 14px;
+  border-radius:var(--radius);
+  border:1px solid var(--rule);
+  background:var(--paper);
+  color:var(--ink);
+}
+#searchInput::placeholder{ color:#A6A08B; }
+#categorySelect{
+  font-family:'Inter', sans-serif;
+  font-size:14px;
+  padding:11px 14px;
+  border-radius:var(--radius);
+  border:1px solid var(--rule);
+  background:var(--paper);
+  color:var(--ink);
+  max-width:280px;
+}
+.mode-toggle{
+  display:flex;
+  border-radius:var(--radius);
+  overflow:hidden;
+  border:1px solid var(--rule);
+}
+.mode-toggle button{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:11px 16px;
+  border:none;
+  background:var(--paper);
+  color:var(--ink-soft);
+  cursor:pointer;
+}
+.mode-toggle button.active{
+  background:var(--accent);
+  color:var(--board-deep);
+  font-weight:600;
+}
+#resultCount{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  color:#A9B7AE;
+  white-space:nowrap;
+}
+
+/* ---------- Grid / cards ---------- */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+  gap:18px;
+}
+.card{
+  background:var(--paper);
+  border-radius:var(--radius);
+  padding:18px 20px 16px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.16);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  border-top:5px solid var(--cat-color, var(--accent));
+}
+.card-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.card-id{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:#A6A08B;
+}
+.card-cat{
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--cat-color, var(--accent));
+  text-align:right;
+}
+.card-objective{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:17px;
+  line-height:1.3;
+  margin:0;
+}
+.card-objective .tag{
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  display:block;
+  margin-bottom:4px;
+  font-weight:500;
+}
+.card-goal{
+  font-family:'Source Serif 4', serif;
+  font-size:14.5px;
+  line-height:1.65;
+  color:var(--ink);
+  margin:0;
+}
+.card-goal .hl{
+  border-radius:2px;
+  padding:0 2px;
+}
+.card-goal .hl.measurable{
+  background:var(--measurable-bg);
+  color:var(--measurable);
+  font-weight:600;
+}
+.card-goal .hl.timebound{
+  background:var(--timebound-bg);
+  color:var(--timebound);
+  font-weight:600;
+}
+.card-goal.hide-hl .hl{
+  background:none;
+  color:inherit;
+  font-weight:inherit;
+}
+.kpis{
+  margin-top:auto;
+  border-top:1px dashed var(--rule);
+  padding-top:10px;
+}
+.kpis .kpi-label{
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:6px;
+  display:block;
+}
+.kpis ul{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.kpis li{
+  font-size:12.5px;
+  line-height:1.4;
+  color:var(--ink);
+  display:flex;
+  gap:7px;
+}
+.kpis li::before{
+  content:"▸";
+  color:var(--cat-color, var(--accent));
+  flex-shrink:0;
+}
+
+/* ---------- Study / flashcard mode ---------- */
+.study{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+.study-progress{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  color:#A9B7AE;
+  letter-spacing:0.08em;
+}
+.flip-outer{
+  width:100%;
+  max-width:620px;
+  height:340px;
+  perspective:1400px;
+}
+.flip-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform 0.5s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+  cursor:pointer;
+}
+.flip-inner.flipped{
+  transform:rotateY(180deg);
+}
+.face{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:var(--radius);
+  background:var(--paper);
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  padding:28px 30px;
+  display:flex;
+  flex-direction:column;
+  border-top:6px solid var(--cat-color, var(--accent));
+  overflow:auto;
+}
+.face.back{
+  transform:rotateY(180deg);
+}
+.face .card-cat{ text-align:left; margin-bottom:auto; }
+.face-content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  flex:1;
+  gap:14px;
+}
+.face .card-objective{
+  font-size:24px;
+}
+.face .hint{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#A6A08B;
+  text-align:center;
+  margin-top:auto;
+}
+.face.back .card-goal{
+  font-size:15px;
+}
+.study-controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.study-controls button{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:10px 18px;
+  border-radius:var(--radius);
+  border:1px solid var(--rule);
+  background:var(--paper);
+  color:var(--ink);
+  cursor:pointer;
+}
+.study-controls button:hover{ border-color:var(--accent); color:var(--accent); }
+.study-controls button.primary{
+  background:var(--accent);
+  color:var(--board-deep);
+  border-color:var(--accent);
+  font-weight:600;
+}
+
+.empty-state{
+  color:var(--paper);
+  text-align:center;
+  padding:60px 20px;
+  font-family:'Source Serif 4', serif;
+  font-size:16px;
+  opacity:0.8;
+}
+
+footer{
+  margin-top:50px;
+  color:#A9B7AE;
+  font-size:12px;
+  text-align:center;
+  font-family:'JetBrains Mono', monospace;
+  letter-spacing:0.04em;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <p class="eyebrow">Strategy &amp; Goal-Setting · Teaching Resource</p>
+    <h1>SMART Goals <em>Lab</em></h1>
+    <p class="lede">A working library of 100 SMART goals, each tied to a strategic objective and measured by real KPIs — drawn from sales, marketing, operations, HR, finance, technology, product, sustainability and training contexts. Use it to study how strong goals are written, or flip into study mode to practise writing your own.</p>
+    <div class="statline" id="statline"></div>
+  </header>
+
+  <div class="legend">
+    <span class="legend-title">How to read each goal</span>
+    <span class="legend-item"><span class="swatch measurable"></span> Measurable target (the number)</span>
+    <span class="legend-item"><span class="swatch timebound"></span> Time-bound deadline</span>
+    <button class="legend-toggle" id="toggleHighlights">Hide highlights</button>
+  </div>
+
+  <div id="smartExplainer">
+    <h2>What makes a goal "SMART"?</h2>
+    <div class="smart-grid">
+      <div><b>S — Specific</b><p>States exactly what will be done and how — the action and method.</p></div>
+      <div><b>M — Measurable</b><p>Includes a number or rate so progress can be tracked objectively.</p></div>
+      <div><b>A — Achievable</b><p>Realistic given the resources, team and approach described.</p></div>
+      <div><b>R — Relevant</b><p>Connects directly to a named strategic objective.</p></div>
+      <div><b>T — Time-bound</b><p>Has a clear deadline or timeframe for completion.</p></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search goals, objectives or KPIs…">
+    <select id="categorySelect"></select>
+    <div class="mode-toggle">
+      <button id="browseBtn" class="active">Browse</button>
+      <button id="studyBtn">Study</button>
+    </div>
+    <span id="resultCount"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="study" id="studyView" hidden>
+    <div class="study-progress" id="studyProgress"></div>
+    <div class="flip-outer">
+      <div class="flip-inner" id="flipInner">
+        <div class="face front">
+          <span class="card-cat" id="frontCat"></span>
+          <div class="face-content">
+            <p class="card-objective"><span class="tag">Strategic objective</span><span id="frontObjective"></span></p>
+          </div>
+          <span class="hint">Click the card to reveal the SMART goal &amp; KPIs</span>
+        </div>
+        <div class="face back">
+          <span class="card-cat" id="backCat"></span>
+          <div class="face-content">
+            <p class="card-goal" id="backGoal"></p>
+            <div class="kpis">
+              <span class="kpi-label">Key performance indicators</span>
+              <ul id="backKpis"></ul>
+            </div>
+          </div>
+          <span class="hint">Click again to flip back</span>
+        </div>
+      </div>
+    </div>
+    <div class="study-controls">
+      <button id="prevBtn">← Previous</button>
+      <button id="flipBtn" class="primary">Flip card</button>
+      <button id="shuffleBtn">Shuffle deck</button>
+      <button id="nextBtn">Next →</button>
+    </div>
+  </div>
+
+  <footer>SMART Goals Lab · 100 examples · 10 strategic categories · built for classroom &amp; self-study use</footer>
+</div>
+
+<script>
+const GOALS = [{"id": 1, "category": "Sales & Revenue Growth", "strategic_objective": "Expand market share in the SMB segment.", "smart_goal": "Increase monthly recurring revenue from small-business clients by 18% within the next two quarters by launching a dedicated SMB sales team and a tiered pricing plan.", "kpis": ["Monthly Recurring Revenue (MRR) from SMB segment", "Number of new SMB accounts closed per month"]}, {"id": 2, "category": "Sales & Revenue Growth", "strategic_objective": "Improve sales team productivity.", "smart_goal": "Reduce the average sales cycle length from 45 days to 30 days within 6 months by implementing a CRM automation workflow and standardized qualification criteria.", "kpis": ["Average sales cycle length (days)", "Lead-to-close conversion rate (%)"]}, {"id": 3, "category": "Sales & Revenue Growth", "strategic_objective": "Strengthen customer retention and upsell revenue.", "smart_goal": "Increase upsell revenue from existing enterprise clients by 25% by the end of Q4 by training account managers on a structured quarterly business review process.", "kpis": ["Upsell revenue ($) per quarter", "Number of QBRs completed per account manager"]}, {"id": 4, "category": "Sales & Revenue Growth", "strategic_objective": "Penetrate a new geographic market.", "smart_goal": "Generate $500,000 in new sales revenue from the European market within 12 months by hiring two regional sales reps and localizing marketing materials into French and German.", "kpis": ["New revenue generated from Europe ($)", "Number of qualified leads generated in target region"]}, {"id": 5, "category": "Sales & Revenue Growth", "strategic_objective": "Improve forecast accuracy and pipeline health.", "smart_goal": "Achieve a sales forecast accuracy within 5% variance by the end of the fiscal year by introducing weekly pipeline reviews and standardized deal-stage definitions.", "kpis": ["Forecast accuracy variance (%)", "Pipeline coverage ratio"]}, {"id": 6, "category": "Sales & Revenue Growth", "strategic_objective": "Boost win rate against key competitors.", "smart_goal": "Increase the competitive win rate from 32% to 45% within 9 months by rolling out a battlecard library and quarterly competitor training sessions for the sales team.", "kpis": ["Competitive win rate (%)", "Number of reps trained on battlecards"]}, {"id": 7, "category": "Sales & Revenue Growth", "strategic_objective": "Diversify revenue streams.", "smart_goal": "Launch and generate $200,000 in revenue from a new subscription-based service line within 8 months by completing a pilot with 10 existing customers in the first 3 months.", "kpis": ["Revenue from new subscription line ($)", "Number of pilot customers converted to paying subscribers"]}, {"id": 8, "category": "Sales & Revenue Growth", "strategic_objective": "Increase average deal size.", "smart_goal": "Raise the average contract value (ACV) by 15% within 6 months by introducing a bundled product package and training sales reps on value-based pricing conversations.", "kpis": ["Average Contract Value (ACV)", "Percentage of deals including bundled add-ons"]}, {"id": 9, "category": "Sales & Revenue Growth", "strategic_objective": "Improve channel partner performance.", "smart_goal": "Increase revenue generated through reseller partners by 30% within 12 months by launching a partner enablement portal and certifying 20 partner sales reps by Q3.", "kpis": ["Channel partner revenue ($)", "Number of certified partner reps"]}, {"id": 10, "category": "Sales & Revenue Growth", "strategic_objective": "Strengthen referral-based growth.", "smart_goal": "Generate 50 new qualified leads per month through a customer referral program by the end of Q2 by launching an incentive-based referral platform within the first 6 weeks.", "kpis": ["Number of referral leads generated per month", "Referral program participation rate (%)"]}, {"id": 11, "category": "Marketing & Brand Awareness", "strategic_objective": "Increase brand visibility in target market.", "smart_goal": "Grow organic website traffic by 40% within 6 months by publishing two SEO-optimized blog posts per week and improving site load speed to under 2 seconds.", "kpis": ["Monthly organic website visitors", "Average page load time (seconds)"]}, {"id": 12, "category": "Marketing & Brand Awareness", "strategic_objective": "Build a stronger social media presence.", "smart_goal": "Grow Instagram and LinkedIn combined followers from 10,000 to 25,000 within 9 months by posting 5 times per week and running 4 influencer collaborations per quarter.", "kpis": ["Total social media followers", "Average engagement rate per post (%)"]}, {"id": 13, "category": "Marketing & Brand Awareness", "strategic_objective": "Improve lead generation through digital campaigns.", "smart_goal": "Generate 1,000 marketing qualified leads (MQLs) per month within 5 months by launching a paid search campaign with a target cost-per-lead under $25.", "kpis": ["Number of MQLs generated per month", "Cost per lead ($)"]}, {"id": 14, "category": "Marketing & Brand Awareness", "strategic_objective": "Strengthen brand reputation and trust.", "smart_goal": "Increase the company's average online review rating from 3.8 to 4.5 stars within 12 months by implementing a post-purchase review request workflow and resolving 90% of negative reviews within 48 hours.", "kpis": ["Average online review rating (out of 5)", "Negative review response time (hours)"]}, {"id": 15, "category": "Marketing & Brand Awareness", "strategic_objective": "Improve email marketing effectiveness.", "smart_goal": "Increase email campaign click-through rate from 2.1% to 4% within 4 months by segmenting the subscriber list into 5 personas and A/B testing subject lines weekly.", "kpis": ["Email click-through rate (%)", "Email list growth rate (%)"]}, {"id": 16, "category": "Marketing & Brand Awareness", "strategic_objective": "Launch a new product successfully.", "smart_goal": "Achieve 5,000 sign-ups for the new product within the first 30 days of launch by executing a pre-launch teaser campaign across three channels starting 6 weeks prior.", "kpis": ["Number of sign-ups in first 30 days", "Pre-launch waitlist size"]}, {"id": 17, "category": "Marketing & Brand Awareness", "strategic_objective": "Improve content marketing ROI.", "smart_goal": "Increase the percentage of website conversions attributed to content downloads from 8% to 18% within 6 months by producing 4 new gated resources (guides, templates) per quarter.", "kpis": ["Content-attributed conversion rate (%)", "Number of gated content downloads per month"]}, {"id": 18, "category": "Marketing & Brand Awareness", "strategic_objective": "Expand video marketing presence.", "smart_goal": "Reach 500,000 cumulative views on the company YouTube channel within 12 months by publishing one tutorial or case-study video per week.", "kpis": ["Cumulative YouTube views", "Average video watch-through rate (%)"]}, {"id": 19, "category": "Marketing & Brand Awareness", "strategic_objective": "Improve event marketing impact.", "smart_goal": "Generate 150 qualified sales leads from industry conferences within the next 12 months by attending 6 targeted events and running a booth demo every 30 minutes.", "kpis": ["Number of leads generated from events", "Cost per lead from events ($)"]}, {"id": 20, "category": "Marketing & Brand Awareness", "strategic_objective": "Strengthen employer brand to support recruitment.", "smart_goal": "Increase the number of organic job applications by 35% within 6 months by publishing employee-story content twice a month and improving the careers page bounce rate by 20%.", "kpis": ["Number of organic job applications per month", "Careers page bounce rate (%)"]}, {"id": 21, "category": "Customer Service & Experience", "strategic_objective": "Improve first-contact resolution.", "smart_goal": "Increase first-contact resolution rate from 65% to 85% within 6 months by implementing a knowledge-base tool and training agents on a new troubleshooting framework.", "kpis": ["First-contact resolution rate (%)", "Average handle time (minutes)"]}, {"id": 22, "category": "Customer Service & Experience", "strategic_objective": "Reduce customer churn.", "smart_goal": "Reduce monthly customer churn rate from 5% to 3% within 9 months by launching a proactive customer success outreach program for accounts at risk.", "kpis": ["Monthly churn rate (%)", "Number of at-risk accounts contacted per month"]}, {"id": 23, "category": "Customer Service & Experience", "strategic_objective": "Improve customer satisfaction scores.", "smart_goal": "Raise the Customer Satisfaction Score (CSAT) from 78% to 90% within 6 months by reducing average response time to under 2 hours and introducing post-resolution follow-ups.", "kpis": ["CSAT score (%)", "Average first response time (hours)"]}, {"id": 24, "category": "Customer Service & Experience", "strategic_objective": "Strengthen omnichannel support capability.", "smart_goal": "Launch live chat support across the website and mobile app within 4 months, achieving 70% of support inquiries resolved via chat by month 6.", "kpis": ["Percentage of inquiries resolved via chat", "Chat availability uptime (%)"]}, {"id": 25, "category": "Customer Service & Experience", "strategic_objective": "Increase Net Promoter Score (NPS).", "smart_goal": "Increase NPS from +22 to +40 within 12 months by implementing quarterly customer feedback surveys and closing the loop with detractors within 5 business days.", "kpis": ["Net Promoter Score (NPS)", "Percentage of detractors contacted within 5 days"]}, {"id": 26, "category": "Customer Service & Experience", "strategic_objective": "Reduce support ticket backlog.", "smart_goal": "Reduce the open support ticket backlog from 800 to under 100 within 3 months by reallocating two engineers to support and triaging tickets by severity twice daily.", "kpis": ["Number of open support tickets", "Average ticket resolution time (hours)"]}, {"id": 27, "category": "Customer Service & Experience", "strategic_objective": "Improve self-service support adoption.", "smart_goal": "Increase self-service help center usage so that 50% of customer questions are resolved without contacting support within 6 months by publishing 30 new help articles.", "kpis": ["Self-service resolution rate (%)", "Number of help center articles published"]}, {"id": 28, "category": "Customer Service & Experience", "strategic_objective": "Improve onboarding experience for new customers.", "smart_goal": "Reduce time-to-first-value for new customers from 14 days to 5 days within 6 months by introducing a guided in-app onboarding checklist and welcome email sequence.", "kpis": ["Average time-to-first-value (days)", "Onboarding checklist completion rate (%)"]}, {"id": 29, "category": "Customer Service & Experience", "strategic_objective": "Strengthen quality assurance in support.", "smart_goal": "Increase quality assurance audit scores for support interactions from 75% to 92% within 6 months by introducing weekly coaching sessions based on call recordings.", "kpis": ["QA audit score (%)", "Number of coaching sessions completed per agent per month"]}, {"id": 30, "category": "Customer Service & Experience", "strategic_objective": "Improve complaint resolution transparency.", "smart_goal": "Resolve 95% of formal customer complaints within 7 business days by the end of Q3 by introducing a dedicated complaints tracking dashboard reviewed weekly.", "kpis": ["Percentage of complaints resolved within 7 days", "Average complaint resolution time (days)"]}, {"id": 31, "category": "Human Resources & Talent Development", "strategic_objective": "Improve recruitment efficiency.", "smart_goal": "Reduce average time-to-hire from 45 days to 25 days within 6 months by implementing a structured interview process and a pre-screening assessment tool.", "kpis": ["Average time-to-hire (days)", "Candidate drop-off rate during the process (%)"]}, {"id": 32, "category": "Human Resources & Talent Development", "strategic_objective": "Strengthen workforce diversity and inclusion.", "smart_goal": "Increase the representation of women in technical roles from 22% to 35% within 18 months by partnering with three diversity-focused recruiting organizations and launching a paid internship program.", "kpis": ["Percentage of women in technical roles", "Number of diversity-program hires per year"]}, {"id": 33, "category": "Human Resources & Talent Development", "strategic_objective": "Improve employee retention.", "smart_goal": "Reduce voluntary turnover among employees with under 2 years of tenure from 28% to 15% within 12 months by introducing a structured mentorship program for new hires.", "kpis": ["Voluntary turnover rate for employees under 2 years (%)", "Number of employees enrolled in mentorship program"]}, {"id": 34, "category": "Human Resources & Talent Development", "strategic_objective": "Build leadership bench strength.", "smart_goal": "Develop 15 employees through a leadership development program within 12 months, with 60% promoted into management roles within 18 months of completion.", "kpis": ["Number of leadership program graduates", "Promotion rate of program graduates (%)"]}, {"id": 35, "category": "Human Resources & Talent Development", "strategic_objective": "Improve employee engagement.", "smart_goal": "Increase the annual employee engagement survey score from 68% to 80% within 12 months by implementing monthly team feedback sessions and acting on the top 3 concerns identified each quarter.", "kpis": ["Employee engagement score (%)", "Number of action items closed per quarter"]}, {"id": 36, "category": "Human Resources & Talent Development", "strategic_objective": "Strengthen performance management practices.", "smart_goal": "Achieve 100% completion of quarterly performance check-ins across all departments by the end of Q3 by training managers on a new feedback framework in the first 6 weeks.", "kpis": ["Performance check-in completion rate (%)", "Number of managers trained on feedback framework"]}, {"id": 37, "category": "Human Resources & Talent Development", "strategic_objective": "Expand internal upskilling programs.", "smart_goal": "Train 200 employees in data and AI literacy fundamentals within 9 months by launching a self-paced online learning track with a completion requirement of 20 hours.", "kpis": ["Number of employees completing the training track", "Average assessment score post-training (%)"]}, {"id": 38, "category": "Human Resources & Talent Development", "strategic_objective": "Improve compensation competitiveness.", "smart_goal": "Bring 95% of roles within 10% of market-rate compensation benchmarks within 12 months by completing a full salary benchmarking review across all departments by Q2.", "kpis": ["Percentage of roles within benchmark range", "Number of departments reviewed per quarter"]}, {"id": 39, "category": "Human Resources & Talent Development", "strategic_objective": "Improve onboarding effectiveness for new employees.", "smart_goal": "Increase new-hire 90-day retention rate from 82% to 95% within 12 months by redesigning the onboarding program to include weekly check-ins for the first month.", "kpis": ["90-day new-hire retention rate (%)", "Number of onboarding check-ins completed per new hire"]}, {"id": 40, "category": "Human Resources & Talent Development", "strategic_objective": "Build a paid internship pipeline for early talent.", "smart_goal": "Launch a paid programming and AI internship program for 30 students within 6 months, achieving an 80% completion rate and converting at least 25% of interns into full-time hires within 12 months.", "kpis": ["Internship completion rate (%)", "Intern-to-full-time-hire conversion rate (%)"]}, {"id": 41, "category": "Operations & Process Efficiency", "strategic_objective": "Reduce production downtime.", "smart_goal": "Reduce unplanned equipment downtime from 12% to 5% within 6 months by implementing a preventive maintenance schedule and IoT-based equipment monitoring.", "kpis": ["Unplanned downtime (% of total operating hours)", "Number of preventive maintenance tasks completed on schedule"]}, {"id": 42, "category": "Operations & Process Efficiency", "strategic_objective": "Improve supply chain reliability.", "smart_goal": "Increase on-time delivery from suppliers from 80% to 95% within 9 months by renegotiating SLAs with the top 5 suppliers and introducing a supplier scorecard reviewed monthly.", "kpis": ["Supplier on-time delivery rate (%)", "Number of suppliers meeting SLA targets"]}, {"id": 43, "category": "Operations & Process Efficiency", "strategic_objective": "Reduce operational waste.", "smart_goal": "Reduce material waste in the production process by 20% within 12 months by implementing lean manufacturing practices and conducting weekly waste audits.", "kpis": ["Material waste rate (%)", "Number of waste-reduction improvements implemented per month"]}, {"id": 44, "category": "Operations & Process Efficiency", "strategic_objective": "Improve order fulfillment speed.", "smart_goal": "Reduce average order fulfillment time from 5 days to 2 days within 6 months by automating the warehouse picking process and reorganizing inventory by SKU velocity.", "kpis": ["Average order fulfillment time (days)", "Order accuracy rate (%)"]}, {"id": 45, "category": "Operations & Process Efficiency", "strategic_objective": "Improve quality control standards.", "smart_goal": "Reduce the product defect rate from 3.2% to under 1% within 6 months by implementing a statistical process control system on the top 3 production lines.", "kpis": ["Product defect rate (%)", "Number of production lines under SPC monitoring"]}, {"id": 46, "category": "Operations & Process Efficiency", "strategic_objective": "Increase process automation.", "smart_goal": "Automate 5 manual back-office workflows within 9 months, reducing the average processing time for those tasks by 50%.", "kpis": ["Number of workflows automated", "Average processing time reduction (%)"]}, {"id": 47, "category": "Operations & Process Efficiency", "strategic_objective": "Improve inventory management.", "smart_goal": "Reduce excess inventory holding costs by 25% within 12 months by implementing a demand-forecasting tool and reviewing reorder points quarterly.", "kpis": ["Inventory holding cost ($)", "Inventory turnover ratio"]}, {"id": 48, "category": "Operations & Process Efficiency", "strategic_objective": "Strengthen workplace safety.", "smart_goal": "Reduce workplace safety incidents by 40% within 12 months by conducting monthly safety audits and completing safety refresher training for 100% of floor staff by Q2.", "kpis": ["Number of safety incidents per quarter", "Percentage of staff completing safety training"]}, {"id": 49, "category": "Operations & Process Efficiency", "strategic_objective": "Improve facilities energy efficiency.", "smart_goal": "Reduce energy consumption across all facilities by 15% within 12 months by upgrading to LED lighting and installing smart thermostats in 100% of locations by Q3.", "kpis": ["Total energy consumption (kWh)", "Percentage of facilities with smart energy systems installed"]}, {"id": 50, "category": "Operations & Process Efficiency", "strategic_objective": "Improve cross-departmental process documentation.", "smart_goal": "Document and standardize 30 core operational processes within 6 months by assigning process owners and completing reviews on a bi-weekly cadence.", "kpis": ["Number of processes documented and approved", "Percentage of processes reviewed on schedule"]}, {"id": 51, "category": "Finance & Cost Management", "strategic_objective": "Improve profitability.", "smart_goal": "Increase gross profit margin from 38% to 45% within 12 months by renegotiating supplier contracts and discontinuing the bottom 10% of underperforming SKUs by revenue.", "kpis": ["Gross profit margin (%)", "Number of underperforming SKUs discontinued"]}, {"id": 52, "category": "Finance & Cost Management", "strategic_objective": "Strengthen cash flow management.", "smart_goal": "Reduce average days sales outstanding (DSO) from 52 days to 35 days within 6 months by automating invoicing and offering a 2% early-payment discount.", "kpis": ["Days Sales Outstanding (DSO)", "Percentage of invoices paid within terms"]}, {"id": 53, "category": "Finance & Cost Management", "strategic_objective": "Improve budgeting accuracy.", "smart_goal": "Reduce departmental budget variance from an average of 12% to under 5% within 9 months by introducing monthly budget-to-actual reviews with department heads.", "kpis": ["Average budget variance (%)", "Number of monthly budget reviews completed"]}, {"id": 54, "category": "Finance & Cost Management", "strategic_objective": "Reduce operating costs.", "smart_goal": "Reduce overall operating expenses by 10% within 12 months by consolidating software vendor contracts and renegotiating office lease terms by Q3.", "kpis": ["Total operating expenses ($)", "Number of vendor contracts consolidated"]}, {"id": 55, "category": "Finance & Cost Management", "strategic_objective": "Improve financial reporting timeliness.", "smart_goal": "Reduce the monthly financial close process from 10 business days to 5 business days within 6 months by automating reconciliations for the top 5 accounts.", "kpis": ["Number of days to close monthly books", "Number of accounts with automated reconciliation"]}, {"id": 56, "category": "Finance & Cost Management", "strategic_objective": "Strengthen financial planning for growth initiatives.", "smart_goal": "Develop and approve a 3-year financial model supporting the company's expansion plans within 4 months, with quarterly reforecasts beginning in month 5.", "kpis": ["Forecast accuracy variance against actuals (%)", "Number of quarterly reforecasts completed on time"]}, {"id": 57, "category": "Finance & Cost Management", "strategic_objective": "Improve accounts payable efficiency.", "smart_goal": "Increase the percentage of vendor invoices processed through automated AP workflows from 40% to 90% within 6 months by onboarding all top-50 vendors onto the e-invoicing platform.", "kpis": ["Percentage of invoices processed automatically", "Average invoice processing time (days)"]}, {"id": 58, "category": "Finance & Cost Management", "strategic_objective": "Reduce financial risk exposure.", "smart_goal": "Reduce foreign currency exposure-related losses by 50% within 12 months by implementing a hedging strategy for the top 3 currency pairs by Q2.", "kpis": ["FX-related losses ($)", "Percentage of exposure covered by hedges"]}, {"id": 59, "category": "Finance & Cost Management", "strategic_objective": "Improve return on marketing investment.", "smart_goal": "Increase marketing ROI from 2.5x to 4x within 9 months by reallocating 20% of budget from underperforming channels to the top 2 performing channels each quarter.", "kpis": ["Marketing ROI (ratio)", "Percentage of budget allocated to top-performing channels"]}, {"id": 60, "category": "Finance & Cost Management", "strategic_objective": "Strengthen audit readiness.", "smart_goal": "Achieve a zero-material-finding result in the annual external audit by closing all 15 open control gaps identified in the prior audit within 9 months.", "kpis": ["Number of open control gaps remaining", "Number of material audit findings"]}, {"id": 61, "category": "Technology, IT & AI Adoption", "strategic_objective": "Improve system reliability.", "smart_goal": "Increase core platform uptime from 99.5% to 99.95% within 6 months by implementing automated failover for the top 3 critical services.", "kpis": ["System uptime (%)", "Number of critical services with automated failover"]}, {"id": 62, "category": "Technology, IT & AI Adoption", "strategic_objective": "Accelerate AI adoption across departments.", "smart_goal": "Deploy AI-powered automation tools in 5 departments within 9 months, reducing manual task hours by an average of 30% in each department.", "kpis": ["Number of departments with AI tools deployed", "Average reduction in manual task hours (%)"]}, {"id": 63, "category": "Technology, IT & AI Adoption", "strategic_objective": "Strengthen cybersecurity posture.", "smart_goal": "Reduce the number of unresolved high-severity security vulnerabilities from 25 to 0 within 4 months by implementing a weekly vulnerability remediation sprint.", "kpis": ["Number of unresolved high-severity vulnerabilities", "Average vulnerability remediation time (days)"]}, {"id": 64, "category": "Technology, IT & AI Adoption", "strategic_objective": "Improve software release velocity.", "smart_goal": "Increase deployment frequency from monthly to weekly within 6 months by implementing a CI/CD pipeline and automated testing for the top 3 product modules.", "kpis": ["Deployment frequency (per month)", "Percentage of deployments passing automated tests"]}, {"id": 65, "category": "Technology, IT & AI Adoption", "strategic_objective": "Modernize legacy infrastructure.", "smart_goal": "Migrate 80% of on-premise servers to cloud infrastructure within 12 months, reducing infrastructure maintenance costs by 25% by month 12.", "kpis": ["Percentage of servers migrated to cloud", "Infrastructure maintenance cost ($)"]}, {"id": 66, "category": "Technology, IT & AI Adoption", "strategic_objective": "Improve data quality for analytics.", "smart_goal": "Reduce data quality errors in the central customer database from 8% to under 2% within 6 months by implementing automated validation rules at point of entry.", "kpis": ["Data error rate (%)", "Number of validation rules implemented"]}, {"id": 67, "category": "Technology, IT & AI Adoption", "strategic_objective": "Strengthen IT helpdesk responsiveness.", "smart_goal": "Reduce average IT ticket resolution time from 3 days to 8 hours within 6 months by introducing a tiered support model and a self-service password reset tool.", "kpis": ["Average ticket resolution time (hours)", "Percentage of tickets resolved at tier 1"]}, {"id": 68, "category": "Technology, IT & AI Adoption", "strategic_objective": "Improve software adoption and training.", "smart_goal": "Achieve 90% active usage of the new project management platform across all teams within 3 months by running mandatory onboarding sessions in the first 2 weeks.", "kpis": ["Active user adoption rate (%)", "Number of onboarding sessions completed"]}, {"id": 69, "category": "Technology, IT & AI Adoption", "strategic_objective": "Reduce technical debt.", "smart_goal": "Reduce the number of flagged critical code-quality issues by 60% within 6 months by allocating 20% of each sprint to technical debt remediation.", "kpis": ["Number of critical code-quality issues", "Percentage of sprint capacity allocated to tech debt"]}, {"id": 70, "category": "Technology, IT & AI Adoption", "strategic_objective": "Build internal AI literacy and capability.", "smart_goal": "Train 100% of engineering staff on AI-assisted development tools within 4 months, achieving a 25% increase in average story points completed per sprint by month 6.", "kpis": ["Percentage of engineers trained on AI tools", "Average story points completed per sprint"]}, {"id": 71, "category": "Product Development & Innovation", "strategic_objective": "Accelerate time-to-market for new features.", "smart_goal": "Reduce average feature development cycle time from 12 weeks to 6 weeks within 9 months by adopting a two-week sprint cadence and a streamlined approval process.", "kpis": ["Average feature cycle time (weeks)", "Number of features shipped per quarter"]}, {"id": 72, "category": "Product Development & Innovation", "strategic_objective": "Improve product quality and reduce defects.", "smart_goal": "Reduce post-release critical bug reports by 50% within 6 months by increasing automated test coverage from 55% to 85%.", "kpis": ["Number of critical bugs reported post-release", "Automated test coverage (%)"]}, {"id": 73, "category": "Product Development & Innovation", "strategic_objective": "Strengthen user-centered design practices.", "smart_goal": "Conduct usability testing with at least 10 users for every major feature release within the next 12 months, improving task success rate to 90% before launch.", "kpis": ["Number of usability tests conducted per release", "Average task success rate (%)"]}, {"id": 74, "category": "Product Development & Innovation", "strategic_objective": "Increase product adoption of new features.", "smart_goal": "Achieve 40% adoption of the newly launched AI assistant feature among active users within 3 months of release through an in-app onboarding tour and email campaign.", "kpis": ["Feature adoption rate (%)", "Number of users completing the onboarding tour"]}, {"id": 75, "category": "Product Development & Innovation", "strategic_objective": "Expand product accessibility.", "smart_goal": "Achieve WCAG 2.1 AA compliance across 100% of core product screens within 6 months by completing an accessibility audit and remediation plan within the first 2 months.", "kpis": ["Percentage of screens meeting WCAG 2.1 AA", "Number of accessibility issues remediated"]}, {"id": 76, "category": "Product Development & Innovation", "strategic_objective": "Improve customer feedback integration into roadmap.", "smart_goal": "Implement 15 customer-requested features from the top voted product feedback board within 12 months, with monthly roadmap reviews incorporating feedback data.", "kpis": ["Number of customer-requested features shipped", "Customer feedback board engagement rate (%)"]}, {"id": 77, "category": "Product Development & Innovation", "strategic_objective": "Reduce churn through product stickiness.", "smart_goal": "Increase the percentage of users reaching their 'core action' within their first week from 35% to 60% within 6 months by redesigning the activation flow.", "kpis": ["Percentage of users reaching core action in week 1", "Day-7 retention rate (%)"]}, {"id": 78, "category": "Product Development & Innovation", "strategic_objective": "Strengthen API ecosystem for partners.", "smart_goal": "Launch a public API with documentation and onboard 20 partner integrations within 9 months by completing developer documentation and a sandbox environment in month 2.", "kpis": ["Number of active partner integrations", "API documentation completeness score (%)"]}, {"id": 79, "category": "Product Development & Innovation", "strategic_objective": "Improve cross-functional collaboration in product development.", "smart_goal": "Reduce the number of features requiring post-launch rework due to scope misalignment from 30% to under 10% within 6 months by introducing joint design-engineering review checkpoints.", "kpis": ["Percentage of features requiring post-launch rework", "Number of joint review checkpoints held per release"]}, {"id": 80, "category": "Product Development & Innovation", "strategic_objective": "Drive innovation through experimentation.", "smart_goal": "Run 24 A/B tests on key conversion flows within 12 months, with at least 8 tests producing a statistically significant improvement of 5% or more.", "kpis": ["Number of A/B tests run per quarter", "Number of tests with statistically significant positive results"]}, {"id": 81, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Reduce the company's carbon footprint.", "smart_goal": "Reduce total Scope 1 and 2 carbon emissions by 25% within 24 months by transitioning 50% of the vehicle fleet to electric and switching to renewable energy contracts for 3 major facilities.", "kpis": ["Total Scope 1 and 2 emissions (metric tons CO2e)", "Percentage of fleet vehicles that are electric"]}, {"id": 82, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Increase recycling and waste diversion.", "smart_goal": "Increase the waste diversion rate from landfill to 75% within 12 months by implementing a company-wide recycling and composting program across all offices by Q2.", "kpis": ["Waste diversion rate (%)", "Number of offices with recycling programs implemented"]}, {"id": 83, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Strengthen community engagement.", "smart_goal": "Achieve 500 employee volunteer hours dedicated to local community programs within 12 months by launching a paid volunteer-time-off policy of 8 hours per employee per quarter.", "kpis": ["Total employee volunteer hours", "Percentage of employees utilizing volunteer time off"]}, {"id": 84, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Improve supply chain sustainability.", "smart_goal": "Ensure 100% of tier-1 suppliers complete a sustainability assessment within 12 months, with 70% achieving a passing score by month 12.", "kpis": ["Percentage of tier-1 suppliers assessed", "Percentage of suppliers achieving a passing sustainability score"]}, {"id": 85, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Promote diversity in supplier base.", "smart_goal": "Increase spend with diverse-owned suppliers from 8% to 20% of total procurement budget within 18 months by adding a supplier diversity criterion to all RFPs starting next quarter.", "kpis": ["Percentage of procurement spend with diverse suppliers", "Number of diverse suppliers onboarded"]}, {"id": 86, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Improve sustainability reporting transparency.", "smart_goal": "Publish the company's first comprehensive ESG report within 9 months, covering 100% of required GRI standard disclosures relevant to the business.", "kpis": ["Percentage of relevant GRI disclosures completed", "Number of stakeholder groups consulted during reporting process"]}, {"id": 87, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Reduce water consumption.", "smart_goal": "Reduce water consumption across manufacturing facilities by 20% within 18 months by installing water-recycling systems in the 2 highest-consumption facilities within the first 9 months.", "kpis": ["Total water consumption (liters)", "Number of facilities with water-recycling systems"]}, {"id": 88, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Strengthen ethical sourcing practices.", "smart_goal": "Achieve third-party ethical sourcing certification for 90% of raw material suppliers within 12 months by completing supplier audits on a quarterly schedule.", "kpis": ["Percentage of suppliers certified", "Number of supplier audits completed per quarter"]}, {"id": 89, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Increase sustainable packaging adoption.", "smart_goal": "Transition 100% of product packaging to recyclable or compostable materials within 18 months by piloting new packaging for the top 3 product lines within the first 6 months.", "kpis": ["Percentage of packaging that is recyclable or compostable", "Number of product lines transitioned per quarter"]}, {"id": 90, "category": "Sustainability & Corporate Social Responsibility", "strategic_objective": "Build employee awareness of sustainability goals.", "smart_goal": "Achieve 80% employee participation in the company's sustainability training program within 6 months by integrating a 30-minute module into the existing onboarding curriculum.", "kpis": ["Employee training participation rate (%)", "Average post-training sustainability knowledge score (%)"]}, {"id": 91, "category": "Training, Education & Professional Development", "strategic_objective": "Expand access to technical education programs.", "smart_goal": "Enroll 200 students in a free introductory coding bootcamp within 12 months by partnering with 5 community organizations and offering 4 cohorts of 50 students each.", "kpis": ["Total number of enrolled students", "Course completion rate (%)"]}, {"id": 92, "category": "Training, Education & Professional Development", "strategic_objective": "Improve learner outcomes in AI fundamentals courses.", "smart_goal": "Increase the average final assessment score in the AI Fundamentals course from 68% to 85% within 2 cohorts by redesigning module 3 with interactive coding labs.", "kpis": ["Average final assessment score (%)", "Number of interactive labs completed per student"]}, {"id": 93, "category": "Training, Education & Professional Development", "strategic_objective": "Strengthen mentorship in the internship program.", "smart_goal": "Pair 100% of paid program interns with a dedicated mentor within the first week of the program and conduct biweekly mentorship check-ins for the full 12-week duration.", "kpis": ["Percentage of interns matched with a mentor in week 1", "Number of mentorship check-ins completed per intern"]}, {"id": 94, "category": "Training, Education & Professional Development", "strategic_objective": "Improve job placement outcomes for graduates.", "smart_goal": "Achieve a 70% job placement rate within 6 months of program completion for the next graduating cohort by introducing employer partnership days starting in month 2 of the program.", "kpis": ["Job placement rate within 6 months (%)", "Number of employer partner sessions held"]}, {"id": 95, "category": "Training, Education & Professional Development", "strategic_objective": "Increase program completion rates.", "smart_goal": "Increase the overall internship program completion rate from 75% to 90% within the next two cohorts by introducing weekly progress check-ins and a peer accountability group structure.", "kpis": ["Program completion rate (%)", "Number of weekly check-ins completed per participant"]}, {"id": 96, "category": "Training, Education & Professional Development", "strategic_objective": "Broaden representation among program participants.", "smart_goal": "Increase the proportion of program participants from underrepresented groups in tech from 20% to 40% within 12 months by partnering with 3 community organizations focused on outreach to these groups.", "kpis": ["Percentage of participants from underrepresented groups", "Number of outreach partnerships established"]}, {"id": 97, "category": "Training, Education & Professional Development", "strategic_objective": "Strengthen project-based learning components.", "smart_goal": "Have 100% of program participants complete and present a capstone AI project by the end of each 12-week cohort, with at least 80% scoring 'proficient' or higher on the project rubric.", "kpis": ["Capstone completion rate (%)", "Percentage of participants scoring proficient or higher"]}, {"id": 98, "category": "Training, Education & Professional Development", "strategic_objective": "Improve instructor and curriculum quality.", "smart_goal": "Achieve an average instructor satisfaction rating of 4.5 out of 5 from participants within the next 2 cohorts by introducing a mid-course feedback survey and instructor coaching sessions.", "kpis": ["Average instructor satisfaction rating (out of 5)", "Number of curriculum revisions made based on feedback"]}, {"id": 99, "category": "Training, Education & Professional Development", "strategic_objective": "Build sustainable funding for the program.", "smart_goal": "Secure $250,000 in sponsorship and grant funding to support paid stipends for 50 interns within 9 months by submitting 10 grant applications and securing 3 corporate sponsorships.", "kpis": ["Total funding secured ($)", "Number of corporate sponsors signed"]}, {"id": 100, "category": "Training, Education & Professional Development", "strategic_objective": "Establish long-term alumni engagement.", "smart_goal": "Build an active alumni network of 150 former program participants within 18 months by launching a quarterly alumni newsletter and hosting 2 networking events per year.", "kpis": ["Number of active alumni network members", "Alumni event attendance rate (%)"]}];
+
+const CATEGORY_COLORS = {
+  "Sales & Revenue Growth": "#C1666B",
+  "Marketing & Brand Awareness": "#3F8F8B",
+  "Customer Service & Experience": "#D9A544",
+  "Human Resources & Talent Development": "#6B5CA5",
+  "Operations & Process Efficiency": "#7C9A5B",
+  "Finance & Cost Management": "#B0563B",
+  "Technology, IT & AI Adoption": "#4D6FA8",
+  "Product Development & Innovation": "#A8763E",
+  "Sustainability & Corporate Social Responsibility": "#5C8A8A",
+  "Training, Education & Professional Development": "#9A5C7C"
+};
+
+/* ---------- Highlighting ---------- */
+const HL_REGEX = /(\bwithin\s+(?:the\s+next\s+)?\d+(?:\s*[-–]\s*\d+)?\s+(?:days|weeks|months|years)\b|\bby\s+(?:Q[1-4]|the end of [A-Za-z]+(?:\s\d{4})?|month\s\d+|next\s\w+)\b)|(\$[\d,]+(?:\.\d+)?|\d+(?:\.\d+)?%|\d+(?:\.\d+)?x\b|\b\d{1,3}(?:,\d{3})+\b|\b\d+(?:\.\d+)?\b)/gi;
+
+function highlight(text){
+  return text.replace(HL_REGEX, (match, timebound, measurable) => {
+    if(timebound) return `<span class="hl timebound">${match}</span>`;
+    if(measurable) return `<span class="hl measurable">${match}</span>`;
+    return match;
+  });
+}
+
+/* ---------- State ---------- */
+let highlightsOn = true;
+let mode = 'browse';
+let studyDeck = [];
+let studyIndex = 0;
+let flipped = false;
+
+/* ---------- Setup ---------- */
+function init(){
+  // stats
+  const cats = Object.keys(CATEGORY_COLORS);
+  const kpiCount = GOALS.reduce((sum,g)=>sum+g.kpis.length,0);
+  document.getElementById('statline').innerHTML = `
+    <div class="stat"><span class="num">${GOALS.length}</span><span class="lbl">SMART goals</span></div>
+    <div class="stat"><span class="num">${cats.length}</span><span class="lbl">Strategic categories</span></div>
+    <div class="stat"><span class="num">${kpiCount}</span><span class="lbl">KPIs defined</span></div>
+  `;
+
+  // category select
+  const sel = document.getElementById('categorySelect');
+  sel.innerHTML = '<option value="">All categories</option>' +
+    cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+  document.getElementById('searchInput').addEventListener('input', render);
+  document.getElementById('categorySelect').addEventListener('change', render);
+  document.getElementById('toggleHighlights').addEventListener('click', ()=>{
+    highlightsOn = !highlightsOn;
+    document.getElementById('toggleHighlights').textContent = highlightsOn ? 'Hide highlights' : 'Show highlights';
+    render();
+  });
+
+  document.getElementById('browseBtn').addEventListener('click', ()=>setMode('browse'));
+  document.getElementById('studyBtn').addEventListener('click', ()=>setMode('study'));
+
+  document.getElementById('flipInner').addEventListener('click', flipCard);
+  document.getElementById('flipBtn').addEventListener('click', flipCard);
+  document.getElementById('prevBtn').addEventListener('click', ()=>step(-1));
+  document.getElementById('nextBtn').addEventListener('click', ()=>step(1));
+  document.getElementById('shuffleBtn').addEventListener('click', shuffleDeck);
+
+  render();
+}
+
+function setMode(m){
+  mode = m;
+  document.getElementById('browseBtn').classList.toggle('active', m==='browse');
+  document.getElementById('studyBtn').classList.toggle('active', m==='study');
+  document.getElementById('grid').hidden = m!=='browse';
+  document.getElementById('studyView').hidden = m!=='study';
+  if(m==='study') buildStudyDeck();
+}
+
+function getFiltered(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const cat = document.getElementById('categorySelect').value;
+  return GOALS.filter(g=>{
+    if(cat && g.category !== cat) return false;
+    if(!q) return true;
+    const haystack = (g.strategic_objective + ' ' + g.smart_goal + ' ' + g.kpis.join(' ') + ' ' + g.category).toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
+/* ---------- Browse rendering ---------- */
+function render(){
+  const filtered = getFiltered();
+  document.getElementById('resultCount').textContent = `${filtered.length} of ${GOALS.length} goals`;
+
+  if(mode==='browse'){
+    const grid = document.getElementById('grid');
+    if(filtered.length===0){
+      grid.innerHTML = `<div class="empty-state">No goals match that search. Try a different keyword or category.</div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(g=>{
+      const color = CATEGORY_COLORS[g.category] || '#D9A544';
+      const goalHtml = highlight(g.smart_goal);
+      return `
+      <div class="card" style="--cat-color:${color}">
+        <div class="card-meta">
+          <span class="card-id">No. ${String(g.id).padStart(3,'0')}</span>
+          <span class="card-cat">${g.category}</span>
+        </div>
+        <p class="card-objective"><span class="tag">Strategic objective</span>${g.strategic_objective}</p>
+        <p class="card-goal ${highlightsOn ? '' : 'hide-hl'}">${goalHtml}</p>
+        <div class="kpis">
+          <span class="kpi-label">KPIs</span>
+          <ul>${g.kpis.map(k=>`<li>${k}</li>`).join('')}</ul>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    buildStudyDeck();
+  }
+}
+
+/* ---------- Study mode ---------- */
+function buildStudyDeck(){
+  studyDeck = getFiltered();
+  studyIndex = 0;
+  flipped = false;
+  if(studyDeck.length===0){
+    document.getElementById('studyView').innerHTML = `<div class="empty-state">No goals match that search/category for study mode.</div>`;
+    return;
+  }
+  showStudyCard();
+}
+
+function showStudyCard(){
+  const g = studyDeck[studyIndex];
+  const color = CATEGORY_COLORS[g.category] || '#D9A544';
+  document.getElementById('flipInner').style.setProperty('--cat-color', color);
+  document.querySelectorAll('.face').forEach(f=>f.style.setProperty('--cat-color', color));
+
+  document.getElementById('frontCat').textContent = g.category;
+  document.getElementById('frontObjective').textContent = g.strategic_objective;
+  document.getElementById('backCat').textContent = g.category;
+  document.getElementById('backGoal').innerHTML = highlightsOn ? highlight(g.smart_goal) : g.smart_goal;
+  document.getElementById('backGoal').className = 'card-goal ' + (highlightsOn ? '' : 'hide-hl');
+  document.getElementById('backKpis').innerHTML = g.kpis.map(k=>`<li>${k}</li>`).join('');
+
+  document.getElementById('studyProgress').textContent = `Card ${studyIndex+1} of ${studyDeck.length} — No. ${String(g.id).padStart(3,'0')}`;
+
+  flipped = false;
+  document.getElementById('flipInner').classList.remove('flipped');
+}
+
+function flipCard(){
+  flipped = !flipped;
+  document.getElementById('flipInner').classList.toggle('flipped', flipped);
+}
+
+function step(dir){
+  if(studyDeck.length===0) return;
+  studyIndex = (studyIndex + dir + studyDeck.length) % studyDeck.length;
+  showStudyCard();
+}
+
+function shuffleDeck(){
+  for(let i=studyDeck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [studyDeck[i], studyDeck[j]] = [studyDeck[j], studyDeck[i]];
+  }
+  studyIndex = 0;
+  showStudyCard();
+}
+
+init();
+</script>
+</body>
+</html>
