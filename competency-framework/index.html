@@ -1,1 +1,954 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Competency Framework</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root{
+  --ink:#161C2E;
+  --ink-soft:#2A3350;
+  --paper:#F5F3EE;
+  --card:#FFFFFF;
+  --line:#E4E0D6;
+  --brass:#AD8A3D;
+  --brass-soft:#E7D9B8;
+  --teal:#3E6259;
+  --text:#2B2E36;
+  --text-mute:#6B7280;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  display:flex;
+  min-height:100vh;
+}
+
+/* ---------- LEFT LADDER RAIL ---------- */
+.rail{
+  width:290px;
+  min-width:290px;
+  background:var(--ink);
+  color:#EDEBE4;
+  padding:36px 24px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+.rail-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--brass-soft);
+  margin-bottom:6px;
+}
+.rail-title{
+  font-family:'Newsreader',serif;
+  font-size:24px;
+  line-height:1.2;
+  margin:0 0 6px 0;
+  font-weight:500;
+}
+.rail-sub{
+  font-size:12.5px;
+  color:#A9AEC2;
+  margin-bottom:28px;
+  line-height:1.5;
+}
+
+.ladder{
+  position:relative;
+  padding-left:4px;
+}
+.ladder::before{
+  content:'';
+  position:absolute;
+  left:17px;
+  top:12px;
+  bottom:12px;
+  width:2px;
+  background:linear-gradient(180deg, var(--brass) 0%, rgba(173,138,61,.15) 100%);
+}
+.rung{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:10px 8px 10px 0;
+  cursor:pointer;
+  border-radius:8px;
+  transition:background .15s ease;
+}
+.rung:hover{ background:rgba(255,255,255,.04); }
+.rung-node{
+  flex:0 0 auto;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--ink-soft);
+  border:2px solid rgba(173,138,61,.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:#C8CCDB;
+  position:relative;
+  z-index:1;
+  transition:all .2s ease;
+}
+.rung.active .rung-node{
+  background:var(--brass);
+  border-color:var(--brass);
+  color:var(--ink);
+  font-weight:700;
+  box-shadow:0 0 0 4px rgba(173,138,61,.18);
+}
+.rung-copy{ padding-top:2px; }
+.rung-name{
+  font-size:13.5px;
+  font-weight:600;
+  color:#EDEBE4;
+  line-height:1.35;
+  transition:color .2s ease;
+}
+.rung.active .rung-name{ color:var(--brass-soft); }
+
+/* ---------- MAIN CONTENT ---------- */
+.main{
+  flex:1;
+  padding:48px 56px 80px;
+  max-width:1000px;
+}
+.level-header{
+  border-bottom:1px solid var(--line);
+  padding-bottom:24px;
+  margin-bottom:36px;
+}
+.level-kicker{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-bottom:10px;
+}
+.level-name{
+  font-family:'Newsreader',serif;
+  font-size:36px;
+  font-weight:500;
+  margin:0 0 10px 0;
+  color:var(--ink);
+}
+.level-tagline{
+  font-size:16px;
+  color:var(--text-mute);
+  max-width:660px;
+  line-height:1.5;
+}
+
+.category{ margin-bottom:44px; }
+.category-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:18px;
+}
+.category-title{
+  font-family:'Newsreader',serif;
+  font-size:22px;
+  font-weight:600;
+  color:var(--ink);
+}
+.category-count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--text-mute);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+  align-items:start;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:20px;
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  animation:rise .35s ease both;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(22,28,46,.06);
+}
+.card.expanded{
+  border-color:var(--brass);
+  box-shadow:0 10px 24px rgba(22,28,46,.08);
+}
+@keyframes rise{
+  from{opacity:0; transform:translateY(6px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:8px;
+}
+.card-name{
+  font-weight:700;
+  font-size:15px;
+  color:var(--ink);
+}
+.chevron{
+  flex:0 0 auto;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--paper);
+  color:var(--brass);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  transition:transform .2s ease;
+  margin-top:1px;
+}
+.card.expanded .chevron{ transform:rotate(180deg); }
+
+.card-statement{
+  font-size:13.5px;
+  color:var(--text);
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+.progress-track{
+  display:flex;
+  gap:3px;
+  margin-bottom:14px;
+}
+.seg{
+  flex:1;
+  height:5px;
+  border-radius:3px;
+  background:var(--line);
+}
+.seg.filled{ background:var(--brass); }
+
+.indicators{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.indicators li{
+  font-size:11.5px;
+  color:var(--teal);
+  background:rgba(62,98,89,.08);
+  padding:4px 9px;
+  border-radius:20px;
+}
+
+.details{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .28s ease;
+}
+.card.expanded .details{
+  max-height:600px;
+  margin-top:14px;
+}
+.detail-item{
+  padding:10px 0;
+  border-top:1px solid var(--line);
+}
+.detail-label{
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:3px;
+}
+.detail-label::before{
+  content:'— ';
+  color:var(--brass);
+}
+.detail-desc{
+  font-size:12.5px;
+  color:var(--text-mute);
+  line-height:1.5;
+}
+.hint{
+  font-size:11px;
+  color:var(--text-mute);
+  margin-top:12px;
+  font-style:italic;
+}
+
+@media (max-width:860px){
+  body{ flex-direction:column; }
+  .rail{ position:relative; height:auto; width:100%; min-width:0; }
+  .ladder::before{ display:none; }
+  .main{ padding:32px 20px 60px; }
+  .level-name{ font-size:28px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="rail">
+  <div class="rail-eyebrow">Organizational Development</div>
+  <h1 class="rail-title">Competency<br>Framework</h1>
+  <p class="rail-sub">Select a level to see its competencies. Click any competency to see the behavioral indicator details.</p>
+  <div class="ladder" id="ladder"></div>
+</aside>
+
+<main class="main">
+  <div class="level-header">
+    <div class="level-kicker" id="levelKicker">Level</div>
+    <h2 class="level-name" id="levelName">—</h2>
+    <p class="level-tagline" id="levelTagline">—</p>
+  </div>
+  <div id="categories"></div>
+</main>
+
+<script>
+const LEVELS = [
+  { id:0, short:"L1", name:"Clerks and Technicians", tag:"Performs defined tasks accurately and reliably under supervision" },
+  { id:1, short:"L2", name:"Professionals and Sr. Professionals", tag:"Delivers specialized or technical work with growing independence" },
+  { id:2, short:"L3", name:"Team Leaders, Supervisors, and Sr. Supervisors", tag:"Guides a team's daily work and supports frontline decisions" },
+  { id:3, short:"L4", name:"Line Managers and Sr. Managers", tag:"Owns a team or department's results and develops its people" },
+  { id:4, short:"L5", name:"Heads and Directors", tag:"Leads a function, translating strategy into execution" },
+  { id:5, short:"L6", name:"C-Level, Managing Directors, and VPs", tag:"Sets strategy for a division or the enterprise as a whole" },
+  { id:6, short:"L7", name:"CEOs", tag:"Owns overall company performance and represents it to the board and market" },
+  { id:7, short:"L8", name:"Chairman, or President", tag:"Provides ultimate governance oversight and shapes long-term direction" }
+];
+
+// each competency: array of 8 entries { s: statement, i: [ {t: indicator label, d: description}, ... ] }
+const DATA = {
+"Core Competencies": {
+  "Communication": [
+    {s:"Follows instructions accurately and reports task status clearly.", i:[
+      {t:"Confirms instructions before starting", d:"Repeats back task details to avoid errors."},
+      {t:"Reports completion promptly", d:"Notifies the supervisor as soon as a task is done."},
+      {t:"Asks for help when unsure", d:"Raises questions rather than guessing at what's expected."}]},
+    {s:"Explains specialized work clearly and asks the right clarifying questions.", i:[
+      {t:"Writes clear technical updates", d:"Documents work so colleagues can follow it without help."},
+      {t:"Asks targeted clarifying questions", d:"Narrows down ambiguity before starting a task."},
+      {t:"Listens actively in meetings", d:"Captures and reflects back key points accurately."}]},
+    {s:"Translates team priorities up and down, keeping both sides informed.", i:[
+      {t:"Relays context both ways", d:"Keeps the supervisor and team aligned on priorities."},
+      {t:"Runs effective daily huddles", d:"Keeps briefings short, focused, and actionable."},
+      {t:"Gives direct peer feedback", d:"Addresses issues with teammates promptly and respectfully."}]},
+    {s:"Communicates vision and expectations so the team acts without constant direction.", i:[
+      {t:"Sets goals with rationale", d:"Explains the reasoning behind each target, not just the number."},
+      {t:"Delivers hard messages with care", d:"Balances honesty with empathy in difficult conversations."},
+      {t:"Adapts style to audience", d:"Adjusts tone and detail for different stakeholders."}]},
+    {s:"Aligns multiple teams around a shared narrative and manages up with candor.", i:[
+      {t:"Builds cross-team alignment", d:"Gets multiple teams telling a consistent, shared story."},
+      {t:"Briefs senior leaders concisely", d:"Distills complex updates into the points that matter."},
+      {t:"Manages conflicting narratives", d:"Reconciles differing views before they escalate."}]},
+    {s:"Shapes how a division or the enterprise understands its direction.", i:[
+      {t:"Sets the divisional narrative", d:"Frames strategy in a way that resonates broadly."},
+      {t:"Represents the organization externally", d:"Speaks on behalf of the business in public settings."},
+      {t:"Communicates through ambiguity", d:"Keeps people oriented and confident during uncertainty."}]},
+    {s:"Owns the company's narrative and communicates it to markets, employees, and media.", i:[
+      {t:"Sets the company narrative", d:"Defines how the business is understood publicly."},
+      {t:"Leads messaging in high-stakes moments", d:"Guides communication through crisis or major change."},
+      {t:"Represents the company to the market", d:"Speaks directly to investors, press, and analysts."}]},
+    {s:"Communicates the organization's long-term purpose and governance posture to the board and public.", i:[
+      {t:"Frames long-term purpose", d:"Articulates the organization's enduring mission and values."},
+      {t:"Represents governance externally", d:"Speaks for the board's position to outside parties."},
+      {t:"Guides board-level dialogue", d:"Keeps discussions constructive, focused, and productive."}]}
+  ],
+  "Collaboration & Teamwork": [
+    {s:"Works well with immediate colleagues and follows team routines.", i:[
+      {t:"Helps teammates when asked", d:"Pitches in on shared tasks without being asked twice."},
+      {t:"Follows shared procedures", d:"Sticks to the agreed ways of working with others."},
+      {t:"Reports conflicts to a supervisor", d:"Flags friction early instead of letting it grow."}]},
+    {s:"Works effectively across a small group and shares knowledge freely.", i:[
+      {t:"Shares expertise openly", d:"Passes on know-how to colleagues without being asked."},
+      {t:"Coordinates on shared deliverables", d:"Aligns own work with adjacent contributors."},
+      {t:"Resolves small friction directly", d:"Addresses minor disagreements before they escalate."}]},
+    {s:"Coordinates work across teammates and removes day-to-day blockers.", i:[
+      {t:"Balances team workload", d:"Redistributes tasks to avoid overloading any one person."},
+      {t:"Mediates minor disputes", d:"Steps in early, before issues grow into conflict."},
+      {t:"Builds team trust", d:"Creates a supportive, dependable team dynamic."}]},
+    {s:"Builds partnerships across teams to get shared work done smoothly.", i:[
+      {t:"Negotiates shared priorities", d:"Aligns competing asks from different teams."},
+      {t:"Builds peer-manager ties", d:"Maintains strong working relationships with fellow managers."},
+      {t:"Escalates conflict well", d:"Raises unresolved issues through the right channels."}]},
+    {s:"Aligns competing team interests toward the function's larger goals.", i:[
+      {t:"Resolves cross-functional conflict", d:"Mediates disputes that span multiple teams."},
+      {t:"Builds coalitions", d:"Rallies support across groups for shared initiatives."},
+      {t:"Champions shared wins", d:"Prioritizes function-wide success over individual silos."}]},
+    {s:"Builds cross-divisional partnerships that support enterprise objectives.", i:[
+      {t:"Builds trust across divisions", d:"Forges strong relationships with senior peers elsewhere."},
+      {t:"Breaks down silos", d:"Removes structural barriers that block collaboration."},
+      {t:"Models executive collaboration", d:"Sets a visible example of partnership for others."}]},
+    {s:"Builds unity across the executive team and the wider organization.", i:[
+      {t:"Builds executive team cohesion", d:"Aligns the C-suite around shared goals and priorities."},
+      {t:"Models company-wide collaboration", d:"Sets the collaborative tone for the whole organization."},
+      {t:"Bridges internal and external partners", d:"Connects internal teams with outside stakeholders."}]},
+    {s:"Fosters collaboration between the board, executive team, and external stakeholders.", i:[
+      {t:"Bridges board and management", d:"Keeps governance and day-to-day execution aligned."},
+      {t:"Builds external alliances", d:"Cultivates relationships with key outside parties."},
+      {t:"Models institutional partnership", d:"Sets the standard for cooperative governance."}]}
+  ],
+  "Problem Solving & Judgment": [
+    {s:"Solves simple, familiar problems by following established procedures.", i:[
+      {t:"Applies known procedures", d:"Follows the correct steps for routine issues."},
+      {t:"Recognizes when to escalate", d:"Passes on unfamiliar problems promptly."},
+      {t:"Double-checks work for errors", d:"Catches mistakes before they cause bigger issues."}]},
+    {s:"Solves well-defined problems within own specialty using sound reasoning.", i:[
+      {t:"Diagnoses root cause", d:"Gets to the real issue rather than just the symptom."},
+      {t:"Applies specialized methods", d:"Uses the right technical approach for the problem."},
+      {t:"Knows when to ask for help", d:"Seeks input on issues outside their expertise."}]},
+    {s:"Solves team-level problems and coaches others through theirs.", i:[
+      {t:"Troubleshoots roadblocks", d:"Clears obstacles that are slowing the team down."},
+      {t:"Coaches problem-solving", d:"Helps others think through issues rather than solving for them."},
+      {t:"Balances speed with rigor", d:"Moves fast without cutting corners that matter."}]},
+    {s:"Solves ambiguous, cross-cutting problems with incomplete information.", i:[
+      {t:"Frames ambiguity clearly", d:"Turns vague problems into clear, answerable questions."},
+      {t:"Weighs trade-offs explicitly", d:"Compares options openly on their real merits."},
+      {t:"Decides with partial information", d:"Moves forward without waiting for full certainty."}]},
+    {s:"Solves systemic problems that span teams, processes, or functions.", i:[
+      {t:"Finds root causes across systems", d:"Looks beyond the immediate symptom to the underlying cause."},
+      {t:"Anticipates second-order effects", d:"Considers downstream consequences of a fix."},
+      {t:"Balances short vs long term", d:"Weighs quick fixes against more durable solutions."}]},
+    {s:"Solves problems with division-wide or enterprise-level consequences.", i:[
+      {t:"Navigates strategic dilemmas", d:"Works through high-stakes trade-offs with no easy answer."},
+      {t:"Owns high-stakes trade-offs", d:"Takes responsibility for consequential, difficult calls."},
+      {t:"Balances stakeholder interests", d:"Weighs competing needs across groups fairly."}]},
+    {s:"Solves problems that shape the company's overall trajectory.", i:[
+      {t:"Owns company-defining decisions", d:"Takes responsibility for calls that shape the business's path."},
+      {t:"Balances investor and market pressures", d:"Weighs external expectations against long-term strategy."},
+      {t:"Navigates existential risks", d:"Addresses threats that could affect the business's survival."}]},
+    {s:"Provides judgment on the organization's most consequential and long-term issues.", i:[
+      {t:"Weighs generational decisions", d:"Considers impact well beyond the current leadership term."},
+      {t:"Balances legacy and change", d:"Protects what matters while enabling necessary progress."},
+      {t:"Advises on existential matters", d:"Guides thinking on risks to the organization's future."}]}
+  ],
+  "Adaptability & Learning Agility": [
+    {s:"Adjusts to routine changes in tasks or schedules.", i:[
+      {t:"Follows updated instructions", d:"Adapts quickly when procedures or schedules change."},
+      {t:"Learns new tasks with guidance", d:"Picks up new routines when properly trained."},
+      {t:"Stays calm with minor changes", d:"Handles small disruptions without difficulty."}]},
+    {s:"Adjusts to changing priorities and picks up new skills quickly.", i:[
+      {t:"Responds well to change", d:"Adjusts approach smoothly when priorities shift."},
+      {t:"Applies feedback fast", d:"Incorporates input into future work quickly."},
+      {t:"Learns tools independently", d:"Picks up new systems without needing hand-holding."}]},
+    {s:"Helps the team absorb change while staying productive.", i:[
+      {t:"Reframes change positively", d:"Helps the team see change as workable, not threatening."},
+      {t:"Adjusts plans as needed", d:"Updates team plans as conditions shift."},
+      {t:"Models comfort with ambiguity", d:"Stays steady and composed when things are unclear."}]},
+    {s:"Leads a team through change without losing momentum or trust.", i:[
+      {t:"Manages team through reorganizations", d:"Keeps the team functioning well through disruption."},
+      {t:"Updates plans as strategy shifts", d:"Revises direction as priorities evolve."},
+      {t:"Builds team resilience", d:"Helps the team recover quickly from setbacks."}]},
+    {s:"Steers a function through significant change and uncertainty.", i:[
+      {t:"Leads through restructuring", d:"Guides the function steadily through major shifts."},
+      {t:"Adapts strategy to new information", d:"Revises plans as facts on the ground change."},
+      {t:"Sustains morale during disruption", d:"Keeps engagement up through difficult periods."}]},
+    {s:"Repositions a division or the enterprise ahead of market shifts.", i:[
+      {t:"Anticipates industry shifts", d:"Spots change before it fully arrives."},
+      {t:"Leads transformational change", d:"Drives large-scale shifts in direction and approach."},
+      {t:"Builds an adaptive culture", d:"Embeds flexibility into how teams normally operate."}]},
+    {s:"Leads the company through fundamental strategic pivots.", i:[
+      {t:"Drives company-wide reinvention", d:"Leads transformation at the highest organizational level."},
+      {t:"Balances continuity and disruption", d:"Protects what works while changing what doesn't."},
+      {t:"Sets the pace of change", d:"Decides how fast the organization should move."}]},
+    {s:"Ensures the organization's governance and direction remain resilient across cycles.", i:[
+      {t:"Safeguards long-term stability", d:"Protects the organization through turbulent periods."},
+      {t:"Guides succession through change", d:"Ensures leadership continuity during major transitions."},
+      {t:"Balances tradition and evolution", d:"Weighs institutional heritage against the need to adapt."}]}
+  ],
+  "Accountability & Ownership": [
+    {s:"Completes assigned tasks reliably and owns small mistakes.", i:[
+      {t:"Meets task deadlines", d:"Finishes assigned work within the given time."},
+      {t:"Admits and corrects errors", d:"Owns up to mistakes quickly and fixes them."},
+      {t:"Follows through without reminders", d:"Completes tasks without needing to be chased."}]},
+    {s:"Owns commitments and follows through without prompting.", i:[
+      {t:"Meets commitments reliably", d:"Delivers consistently on what was promised."},
+      {t:"Owns mistakes and fixes them", d:"Takes responsibility and corrects course quickly."},
+      {t:"Tracks own progress transparently", d:"Keeps status visible to others without being asked."}]},
+    {s:"Owns team outputs and holds teammates to shared standards.", i:[
+      {t:"Holds team to deadlines", d:"Keeps the team on schedule consistently."},
+      {t:"Owns team misses upward", d:"Reports shortfalls to leadership honestly."},
+      {t:"Sets clear expectations", d:"Makes standards explicit so the team knows what's expected."}]},
+    {s:"Owns team results end-to-end, including setbacks.", i:[
+      {t:"Owns performance fully", d:"Takes full responsibility for the team's results."},
+      {t:"Takes public responsibility", d:"Doesn't deflect blame when things go wrong."},
+      {t:"Drives corrective action", d:"Puts real fixes in place after failures."}]},
+    {s:"Owns outcomes across teams and is accountable for the function's results.", i:[
+      {t:"Owns cross-team outcomes", d:"Answers for results that span beyond a single team."},
+      {t:"Accountable for functional metrics", d:"Owns the numbers that matter for the whole function."},
+      {t:"Drives accountability culture", d:"Builds ownership into how the function operates."}]},
+    {s:"Owns division or enterprise-level results and their consequences.", i:[
+      {t:"Accountable for divisional performance", d:"Answers for the division's overall results."},
+      {t:"Owns strategic commitments", d:"Delivers on promises made to senior leadership."},
+      {t:"Sets the accountability standard", d:"Models ownership behavior for other leaders."}]},
+    {s:"Owns company-wide results and is answerable to the board.", i:[
+      {t:"Accountable to the board", d:"Reports company performance directly to governance."},
+      {t:"Owns company-wide outcomes", d:"Takes responsibility for results at every level."},
+      {t:"Sets the tone for accountability", d:"Establishes ownership as a company-wide norm."}]},
+    {s:"Bears ultimate responsibility for the organization's stewardship and governance.", i:[
+      {t:"Accountable to shareholders and society", d:"Answers for the organization's broader impact."},
+      {t:"Owns governance outcomes", d:"Takes responsibility for board-level decisions."},
+      {t:"Safeguards institutional integrity", d:"Protects the organization's reputation and standards."}]}
+  ]
+},
+"Leadership Competencies": {
+  "People Leadership": [
+    {s:"Manages own workload and follows workplace conduct standards.", i:[
+      {t:"Manages own time", d:"Completes tasks within set schedules."},
+      {t:"Follows workplace standards", d:"Adheres to conduct, safety, and quality rules."},
+      {t:"Asks for support when needed", d:"Seeks help rather than struggling alone."}]},
+    {s:"Manages own development and supports colleagues informally.", i:[
+      {t:"Prioritizes own workload", d:"Manages competing tasks without oversight."},
+      {t:"Seeks own growth opportunities", d:"Looks for ways to build new skills."},
+      {t:"Supports colleagues informally", d:"Helps peers without being asked to."}]},
+    {s:"Provides day-to-day guidance to a small group of teammates.", i:[
+      {t:"Gives real-time direction", d:"Guides teammates through daily tasks and questions."},
+      {t:"Onboards new teammates", d:"Helps new joiners get up to speed quickly."},
+      {t:"Represents team needs upward", d:"Raises team concerns to leadership."}]},
+    {s:"Manages a team's performance, growth, and morale directly.", i:[
+      {t:"Runs regular one-on-ones", d:"Meets consistently with each team member."},
+      {t:"Manages performance formally", d:"Conducts structured performance conversations."},
+      {t:"Builds team cohesion", d:"Fosters a strong, connected team dynamic."}]},
+    {s:"Leads and develops a team of managers.", i:[
+      {t:"Coaches people managers", d:"Develops the managers who report to them."},
+      {t:"Builds leadership bench strength", d:"Prepares others to take on bigger roles."},
+      {t:"Sets people strategy", d:"Shapes how the function manages and grows talent."}]},
+    {s:"Builds and shapes senior leadership teams within a division or enterprise.", i:[
+      {t:"Builds senior leadership capability", d:"Strengthens the layer of leaders below them."},
+      {t:"Shapes organizational culture", d:"Influences how the wider organization behaves."},
+      {t:"Sets leadership standards", d:"Defines what good leadership looks like at scale."}]},
+    {s:"Builds the executive team and shapes company-wide leadership culture.", i:[
+      {t:"Builds the executive team", d:"Recruits and develops top company leadership."},
+      {t:"Shapes company culture", d:"Sets the tone for the entire organization."},
+      {t:"Owns leadership succession", d:"Ensures strong leaders are ready to step up."}]},
+    {s:"Provides oversight of executive leadership and organizational governance.", i:[
+      {t:"Oversees CEO performance", d:"Evaluates and supports top company leadership."},
+      {t:"Guides board composition", d:"Shapes the makeup of the governing body."},
+      {t:"Safeguards leadership continuity", d:"Ensures a strong path for succession at the top."}]}
+  ],
+  "Strategic Thinking": [
+    {s:"Follows instructions without needing to understand broader context.", i:[
+      {t:"Completes tasks as directed", d:"Executes instructions accurately and on time."},
+      {t:"Notices basic inefficiencies", d:"Flags obvious issues in routine work."},
+      {t:"Asks about purpose when curious", d:"Shows interest in the bigger picture behind tasks."}]},
+    {s:"Understands how own work connects to team and company goals.", i:[
+      {t:"Connects tasks to goals", d:"Sees how daily work supports wider objectives."},
+      {t:"Understands the underlying reasoning", d:"Grasps the logic behind stated priorities."},
+      {t:"Flags misalignment early", d:"Raises concerns when work drifts off-goal."}]},
+    {s:"Translates team strategy into a clear day-to-day plan.", i:[
+      {t:"Breaks strategy into tasks", d:"Turns broader plans into actionable daily work."},
+      {t:"Prioritizes backlog strategically", d:"Sequences work based on real importance."},
+      {t:"Spots near-term risks", d:"Notices issues before they escalate further."}]},
+    {s:"Shapes team strategy and plans multiple quarters ahead.", i:[
+      {t:"Sets team roadmap", d:"Defines the team's direction over the coming quarters."},
+      {t:"Balances short vs long-term bets", d:"Weighs quick wins against bigger future plays."},
+      {t:"Anticipates resourcing needs", d:"Plans ahead for the people and budget required."}]},
+    {s:"Sets functional strategy aligned to company objectives.", i:[
+      {t:"Owns functional strategy", d:"Defines the direction for the whole function."},
+      {t:"Aligns strategy across teams", d:"Ensures teams are pulling in the same direction."},
+      {t:"Plans one to three years ahead", d:"Thinks beyond the current quarter or year."}]},
+    {s:"Sets strategy for a division or major business area.", i:[
+      {t:"Defines divisional strategy", d:"Sets direction for a major part of the business."},
+      {t:"Allocates resources strategically", d:"Directs investment toward the highest-value priorities."},
+      {t:"Plans a multi-year horizon", d:"Thinks in terms of years, not just quarters."}]},
+    {s:"Sets overall company strategy and its long-term positioning.", i:[
+      {t:"Defines company strategy", d:"Sets the direction for the entire business."},
+      {t:"Makes enterprise-level bets", d:"Commits significant resources to major strategic moves."},
+      {t:"Positions the company in its market", d:"Decides where and how the company competes."}]},
+    {s:"Shapes the organization's long-term vision, mission, and governance strategy.", i:[
+      {t:"Sets institutional vision", d:"Defines the organization's long-term purpose."},
+      {t:"Guides strategic governance", d:"Ensures strategy stays aligned with mission and values."},
+      {t:"Thinks in decades", d:"Considers impact well beyond current leadership."}]}
+  ],
+  "Decision-Making": [
+    {s:"Follows defined steps and escalates anything outside routine.", i:[
+      {t:"Makes routine decisions confidently", d:"Handles standard situations independently."},
+      {t:"Escalates unfamiliar situations", d:"Passes on anything outside the normal scope."},
+      {t:"Follows approval processes", d:"Respects required sign-offs and procedures."}]},
+    {s:"Makes sound decisions within defined scope and escalates appropriately.", i:[
+      {t:"Decides confidently in-scope", d:"Handles decisions clearly within their remit."},
+      {t:"Knows when to escalate", d:"Recognizes when something needs a higher-level call."},
+      {t:"Explains reasoning clearly", d:"Justifies decisions with clear, sound logic."}]},
+    {s:"Makes team-level calls balancing speed and quality.", i:[
+      {t:"Resolves team trade-offs", d:"Makes calls on competing team priorities."},
+      {t:"Decides with partial information", d:"Moves forward without waiting for full certainty."},
+      {t:"Involves team appropriately", d:"Consults others when their input adds real value."}]},
+    {s:"Owns decisions that shape team direction and resourcing.", i:[
+      {t:"Makes resourcing decisions", d:"Decides how people and budget are used."},
+      {t:"Decides amid ambiguity", d:"Makes sound calls without complete information."},
+      {t:"Owns consequences of calls", d:"Takes responsibility for the outcomes of decisions."}]},
+    {s:"Makes decisions with cross-functional and budget impact.", i:[
+      {t:"Approves budget trade-offs", d:"Signs off on significant resourcing decisions."},
+      {t:"Balances competing team needs", d:"Weighs conflicting priorities fairly across teams."},
+      {t:"Weighs risk vs opportunity", d:"Judges when a bet is genuinely worth taking."}]},
+    {s:"Makes decisions that shape a division or major business outcomes.", i:[
+      {t:"Makes high-impact investment calls", d:"Decides on significant resource commitments."},
+      {t:"Balances division-wide trade-offs", d:"Weighs impact across multiple teams and functions."},
+      {t:"Owns strategic risk", d:"Accepts responsibility for bold, consequential moves."}]},
+    {s:"Makes decisions with company-wide, long-term, and external impact.", i:[
+      {t:"Makes high-stakes strategic calls", d:"Decides on matters that shape the company's future."},
+      {t:"Decides under board scrutiny", d:"Makes calls knowing they will be closely reviewed."},
+      {t:"Owns irreversible decisions", d:"Takes responsibility for decisions that can't be undone."}]},
+    {s:"Provides final governance judgment on the organization's most critical matters.", i:[
+      {t:"Exercises governance authority", d:"Makes or ratifies the highest-level decisions."},
+      {t:"Balances stakeholder interests at scale", d:"Weighs shareholders, employees, and society together."},
+      {t:"Safeguards long-term institutional interest", d:"Protects the organization beyond any single decision."}]}
+  ],
+  "Talent Development & Coaching": [
+    {s:"Follows training provided and applies it to daily work.", i:[
+      {t:"Completes assigned training", d:"Engages fully with learning opportunities provided."},
+      {t:"Applies new skills", d:"Uses training in day-to-day tasks."},
+      {t:"Asks questions to learn", d:"Seeks real understanding rather than just complying."}]},
+    {s:"Shares knowledge with peers and mentors when asked.", i:[
+      {t:"Mentors newer colleagues", d:"Supports less experienced peers informally."},
+      {t:"Shares expertise openly", d:"Passes on specialized knowledge freely."},
+      {t:"Gives constructive feedback", d:"Offers helpful, specific input to peers."}]},
+    {s:"Actively coaches teammates on skills and growth.", i:[
+      {t:"Gives regular growth feedback", d:"Shares development input consistently, not just at reviews."},
+      {t:"Identifies strengths and gaps", d:"Recognizes where teammates excel or need support."},
+      {t:"Supports skill-building", d:"Helps teammates build new capabilities over time."}]},
+    {s:"Builds individual development plans and grows team capability.", i:[
+      {t:"Runs development planning", d:"Creates growth plans with each team member."},
+      {t:"Delegates to stretch people", d:"Assigns work that deliberately builds new skills."},
+      {t:"Manages underperformance directly", d:"Addresses performance gaps head-on and fairly."}]},
+    {s:"Builds succession plans and develops future leaders.", i:[
+      {t:"Identifies high-potential talent", d:"Spots people ready for more responsibility."},
+      {t:"Builds succession pipelines", d:"Prepares capable backups for key roles."},
+      {t:"Coaches managers on people skills", d:"Develops managers' own coaching ability."}]},
+    {s:"Shapes talent strategy and builds leadership pipeline for a division.", i:[
+      {t:"Owns divisional succession planning", d:"Ensures strong leaders are ready across the division."},
+      {t:"Builds leadership pipeline", d:"Develops a steady flow of future leaders."},
+      {t:"Champions development programs", d:"Advocates for structured growth initiatives."}]},
+    {s:"Shapes talent strategy and builds the leadership pipeline company-wide.", i:[
+      {t:"Owns executive succession planning", d:"Ensures the company has ready successors at the top."},
+      {t:"Builds company talent strategy", d:"Sets the overall approach to developing people."},
+      {t:"Champions leadership development", d:"Invests seriously in growing future leaders."}]},
+    {s:"Oversees leadership succession and institutional talent stewardship at the governance level.", i:[
+      {t:"Oversees CEO succession", d:"Guides the process of replacing top leadership."},
+      {t:"Guards institutional knowledge", d:"Ensures critical know-how isn't lost over time."},
+      {t:"Advises on leadership readiness", d:"Assesses whether leaders are prepared for what's next."}]}
+  ],
+  "Change Leadership": [
+    {s:"Follows changes to procedures as instructed.", i:[
+      {t:"Adjusts to new procedures", d:"Adapts smoothly to updated instructions."},
+      {t:"Reports difficulties with change", d:"Flags when a new process isn't working well."},
+      {t:"Stays productive during transitions", d:"Keeps working effectively despite change."}]},
+    {s:"Adapts personally to change and supports teammates through it.", i:[
+      {t:"Stays productive through change", d:"Maintains output despite ongoing disruption."},
+      {t:"Supports peers adjusting", d:"Helps colleagues cope with change constructively."},
+      {t:"Gives feedback on impact", d:"Reports honestly on how changes are landing."}]},
+    {s:"Helps translate change initiatives into team action.", i:[
+      {t:"Communicates change to team", d:"Explains clearly what's changing and why."},
+      {t:"Addresses team concerns", d:"Listens to and resolves worries about change."},
+      {t:"Keeps team engaged", d:"Maintains morale and focus through the transition."}]},
+    {s:"Leads team-level change initiatives from design to adoption.", i:[
+      {t:"Plans change rollout", d:"Designs how a change will be introduced to the team."},
+      {t:"Manages resistance constructively", d:"Addresses pushback without unnecessary conflict."},
+      {t:"Measures adoption", d:"Tracks how well the change is taking hold."}]},
+    {s:"Leads function-wide transformation initiatives.", i:[
+      {t:"Sponsors change programs", d:"Champions transformation efforts across the function."},
+      {t:"Aligns leaders on approach", d:"Gets other leaders working from the same playbook."},
+      {t:"Sustains change post-launch", d:"Ensures changes stick well after the initial rollout."}]},
+    {s:"Leads transformation across a division or major business area.", i:[
+      {t:"Sponsors divisional transformation", d:"Drives large-scale change across the division."},
+      {t:"Redesigns structures as needed", d:"Adjusts team and process design for the future."},
+      {t:"Builds change-ready teams", d:"Prepares teams to handle ongoing change well."}]},
+    {s:"Leads enterprise transformation and organizational redesign.", i:[
+      {t:"Sponsors company-wide transformation", d:"Owns transformation efforts at the highest level."},
+      {t:"Redesigns org structure", d:"Reshapes how the company itself is organized."},
+      {t:"Builds a change-ready culture", d:"Embeds adaptability into the company's core identity."}]},
+    {s:"Provides governance oversight of major organizational transformation and its risks.", i:[
+      {t:"Approves major transformation efforts", d:"Signs off on organization-defining change initiatives."},
+      {t:"Weighs transformation risk", d:"Assesses the risk large-scale change poses to the institution."},
+      {t:"Protects institutional continuity", d:"Ensures transformation doesn't compromise core stability."}]}
+  ]
+},
+"Business & Execution Competencies": {
+  "Business Acumen": [
+    {s:"Understands basic workplace procedures and how own task fits the process.", i:[
+      {t:"Understands own task's purpose", d:"Knows why the task matters within the process."},
+      {t:"Follows cost-conscious habits", d:"Avoids waste in day-to-day work."},
+      {t:"Notices process inefficiencies", d:"Flags things that seem wasteful or unnecessary."}]},
+    {s:"Understands how own role contributes to business results.", i:[
+      {t:"Understands team's metrics", d:"Knows what the team is actually measured on."},
+      {t:"Considers cost and impact", d:"Thinks about the real value of their work."},
+      {t:"Asks how work drives value", d:"Seeks to understand the bigger business picture."}]},
+    {s:"Understands the team's metrics and how they roll up.", i:[
+      {t:"Tracks team KPIs", d:"Keeps an eye on team performance numbers."},
+      {t:"Explains business impact", d:"Describes clearly how the team's work matters."},
+      {t:"Spots metric red flags", d:"Notices when numbers start to go off track."}]},
+    {s:"Manages team against business metrics and budget.", i:[
+      {t:"Owns team budget and metrics", d:"Is responsible for the team's financial and performance targets."},
+      {t:"Connects work to P&L", d:"Links team output directly to financial results."},
+      {t:"Uses business context in trade-offs", d:"Weighs decisions against real business impact."}]},
+    {s:"Understands market, competitive, and financial context for the function.", i:[
+      {t:"Analyzes market trends", d:"Tracks external trends relevant to the function."},
+      {t:"Owns functional budget", d:"Manages the function's overall spend."},
+      {t:"Links strategy to financials", d:"Connects strategic choices to financial outcomes."}]},
+    {s:"Understands the market and financial context of a division or business unit.", i:[
+      {t:"Analyzes competitive positioning", d:"Assesses how the division compares to rivals."},
+      {t:"Owns divisional P&L", d:"Is accountable for divisional financial performance."},
+      {t:"Sets pricing or investment strategy", d:"Shapes how resources are priced or allocated."}]},
+    {s:"Owns enterprise business performance and market position.", i:[
+      {t:"Owns company P&L", d:"Is accountable for overall company financial results."},
+      {t:"Sets pricing and market strategy", d:"Shapes how the company competes and prices."},
+      {t:"Represents business to investors", d:"Communicates performance to the investment community."}]},
+    {s:"Provides governance-level oversight of the organization's overall financial and market position.", i:[
+      {t:"Reviews enterprise financial health", d:"Assesses the company's financial position at a governance level."},
+      {t:"Oversees strategic market positioning", d:"Evaluates the company's competitive standing long-term."},
+      {t:"Represents the institution to major stakeholders", d:"Speaks for the organization at the highest external level."}]}
+  ],
+  "Execution & Results Orientation": [
+    {s:"Completes assigned tasks on time and to expected quality.", i:[
+      {t:"Meets task deadlines", d:"Finishes work within the given time frame."},
+      {t:"Follows quality checklists", d:"Sticks to expected standards and procedures."},
+      {t:"Reports issues promptly", d:"Flags problems that could delay work."}]},
+    {s:"Delivers own work on time and to a high standard.", i:[
+      {t:"Meets deadlines consistently", d:"Reliably delivers on schedule, every time."},
+      {t:"Maintains quality under pressure", d:"Keeps standards high even when busy."},
+      {t:"Flags delivery risk early", d:"Raises concerns before deadlines are actually missed."}]},
+    {s:"Keeps the team's day-to-day execution on track.", i:[
+      {t:"Tracks delivery closely", d:"Monitors team progress against the plan."},
+      {t:"Removes execution blockers", d:"Clears obstacles that are slowing delivery."},
+      {t:"Keeps quality bar high", d:"Maintains consistent standards across the team."}]},
+    {s:"Drives the team to hit goals reliably, quarter over quarter.", i:[
+      {t:"Owns team OKRs", d:"Is accountable for the team's goal achievement."},
+      {t:"Course-corrects gaps", d:"Adjusts plans quickly when things go off track."},
+      {t:"Balances speed and quality", d:"Delivers quickly without sacrificing standards."}]},
+    {s:"Ensures multiple teams execute against functional priorities.", i:[
+      {t:"Aligns roadmaps to priorities", d:"Keeps team plans matched to top priorities."},
+      {t:"Resolves execution conflicts", d:"Sorts out competing execution demands."},
+      {t:"Reports progress up", d:"Keeps leadership clearly informed on delivery."}]},
+    {s:"Ensures a division or major business area executes against strategy.", i:[
+      {t:"Aligns divisional execution to strategy", d:"Keeps division-wide delivery on strategic track."},
+      {t:"Holds leaders accountable for results", d:"Ensures every leader delivers on commitments."},
+      {t:"Adjusts plans from performance data", d:"Revises approach based on real outcomes."}]},
+    {s:"Ensures the organization executes against company strategy at scale.", i:[
+      {t:"Owns company-wide execution", d:"Is accountable for delivery across the entire company."},
+      {t:"Holds leaders accountable", d:"Ensures every leader delivers on their commitments."},
+      {t:"Adjusts strategy from results", d:"Refines strategy based on real-world outcomes."}]},
+    {s:"Oversees whether company execution aligns with the organization's stated strategy and values.", i:[
+      {t:"Reviews execution against strategy", d:"Assesses whether results match the stated direction."},
+      {t:"Holds the CEO accountable for delivery", d:"Evaluates top leadership's execution performance."},
+      {t:"Safeguards long-term execution integrity", d:"Ensures execution doesn't compromise long-term interests."}]}
+  ],
+  "Stakeholder & Relationship Management": [
+    {s:"Interacts respectfully with coworkers and immediate supervisors.", i:[
+      {t:"Responds professionally to requests", d:"Handles requests from others courteously."},
+      {t:"Follows communication norms", d:"Uses appropriate channels and tone."},
+      {t:"Reports issues to the right person", d:"Knows who to approach for different kinds of help."}]},
+    {s:"Builds good working relationships with immediate stakeholders.", i:[
+      {t:"Responds to stakeholder needs", d:"Addresses requests from close partners promptly."},
+      {t:"Builds trust with partners", d:"Establishes reliability with regular contacts."},
+      {t:"Manages expectations clearly", d:"Sets realistic expectations upfront."}]},
+    {s:"Manages relationships with adjacent teams and users.", i:[
+      {t:"Represents team to stakeholders", d:"Speaks for the team in outside interactions."},
+      {t:"Manages minor conflict", d:"Resolves small disagreements with partners directly."},
+      {t:"Builds reliable partnerships", d:"Establishes dependable working relationships."}]},
+    {s:"Manages relationships with cross-functional partners and leadership.", i:[
+      {t:"Manages up effectively", d:"Builds strong, trusted relationships with leadership."},
+      {t:"Builds cross-functional trust", d:"Establishes credibility with partner teams."},
+      {t:"Handles escalations well", d:"Resolves escalated issues professionally and calmly."}]},
+    {s:"Manages senior stakeholders and external partners for the function.", i:[
+      {t:"Manages executive stakeholders", d:"Builds relationships with senior leadership."},
+      {t:"Negotiates with external partners", d:"Handles agreements with outside parties."},
+      {t:"Represents function in leadership forums", d:"Speaks for the function at a senior level."}]},
+    {s:"Manages senior stakeholders and strategic partners for a division.", i:[
+      {t:"Manages senior executive relationships", d:"Builds trust with top divisional leadership."},
+      {t:"Negotiates strategic partnerships", d:"Shapes significant external agreements."},
+      {t:"Represents division at leadership level", d:"Speaks for the division in senior forums."}]},
+    {s:"Manages board, investor, and external stakeholder relationships.", i:[
+      {t:"Manages board relationships", d:"Builds trust and alignment with the board."},
+      {t:"Represents company externally", d:"Speaks for the company in public and market settings."},
+      {t:"Negotiates high-stakes partnerships", d:"Leads major external agreements and deals."}]},
+    {s:"Manages the organization's relationship with its board, shareholders, and broader institutional stakeholders.", i:[
+      {t:"Chairs or guides board relations", d:"Leads engagement with the governing body."},
+      {t:"Represents institutional interests", d:"Speaks for the organization's long-term stakeholders."},
+      {t:"Manages shareholder and public trust", d:"Safeguards the organization's standing and credibility."}]}
+  ],
+  "Innovation & Continuous Improvement": [
+    {s:"Follows established procedures and points out obvious issues.", i:[
+      {t:"Follows standard procedures", d:"Sticks to the defined way of working."},
+      {t:"Reports obvious problems", d:"Flags clear issues to a supervisor."},
+      {t:"Suggests small fixes", d:"Offers simple ideas for improvement."}]},
+    {s:"Suggests improvements to own workflows and tools.", i:[
+      {t:"Proposes process improvements", d:"Suggests better ways of doing routine work."},
+      {t:"Experiments with new approaches", d:"Tries alternative methods when useful."},
+      {t:"Adopts new tools readily", d:"Picks up better tools without resistance."}]},
+    {s:"Drives small-scale improvements within the team.", i:[
+      {t:"Runs team retrospectives", d:"Leads regular team reflection sessions."},
+      {t:"Pilots process changes", d:"Tests new approaches within the team first."},
+      {t:"Encourages experimentation", d:"Supports the team trying new things safely."}]},
+    {s:"Drives improvement initiatives that measurably improve team output.", i:[
+      {t:"Owns improvement projects", d:"Leads structured efforts to improve outcomes."},
+      {t:"Measures impact of changes", d:"Tracks whether improvements actually help."},
+      {t:"Builds experimentation culture", d:"Encourages a test-and-learn mindset in the team."}]},
+    {s:"Drives innovation initiatives across the function.", i:[
+      {t:"Sponsors innovation initiatives", d:"Champions new ideas across the function."},
+      {t:"Scales successful pilots", d:"Expands what works to a wider scale."},
+      {t:"Benchmarks best practice", d:"Compares against how others do it well."}]},
+    {s:"Drives innovation initiatives across a division or business unit.", i:[
+      {t:"Sponsors divisional innovation", d:"Champions new approaches across the division."},
+      {t:"Scales impactful pilots", d:"Expands successful ideas division-wide."},
+      {t:"Benchmarks against industry leaders", d:"Compares performance to top competitors."}]},
+    {s:"Sets the organization's innovation agenda and risk appetite.", i:[
+      {t:"Defines innovation strategy", d:"Sets direction for where the company innovates."},
+      {t:"Invests in new capabilities", d:"Commits resources to new strategic bets."},
+      {t:"Balances innovation with core business", d:"Weighs new ideas against existing priorities."}]},
+    {s:"Provides governance perspective on the organization's innovation and risk posture.", i:[
+      {t:"Reviews innovation risk", d:"Assesses the risk profile of major new bets."},
+      {t:"Balances innovation with institutional stability", d:"Weighs new ventures against long-term stability."},
+      {t:"Guides long-term innovation direction", d:"Advises on where innovation should head over time."}]}
+  ],
+  "Resource & Financial Stewardship": [
+    {s:"Uses supplies, equipment, and time responsibly.", i:[
+      {t:"Avoids waste of materials", d:"Uses supplies and equipment carefully."},
+      {t:"Manages own time well", d:"Uses working hours efficiently."},
+      {t:"Reports resource needs", d:"Flags when more supplies or tools are needed."}]},
+    {s:"Uses time and resources efficiently within own role.", i:[
+      {t:"Manages own time efficiently", d:"Prioritizes tasks to make the most of available time."},
+      {t:"Avoids unnecessary spend", d:"Keeps personal resource use lean."},
+      {t:"Flags resource needs early", d:"Raises resourcing gaps before they become urgent."}]},
+    {s:"Manages team resources like schedules and tools efficiently.", i:[
+      {t:"Allocates tasks efficiently", d:"Distributes work to make the best use of people."},
+      {t:"Manages small budget items", d:"Handles minor spending responsibly."},
+      {t:"Avoids resource waste", d:"Keeps team resource use lean and purposeful."}]},
+    {s:"Manages team budget and staffing decisions.", i:[
+      {t:"Owns team budget", d:"Is responsible for the team's financial resources."},
+      {t:"Makes staffing calls", d:"Decides on hiring and team composition."},
+      {t:"Justifies resource requests", d:"Makes the case for additional resources when needed."}]},
+    {s:"Manages functional budget and resource allocation across teams.", i:[
+      {t:"Owns functional budget", d:"Is accountable for the function's overall spend."},
+      {t:"Allocates across teams", d:"Distributes resources fairly among multiple teams."},
+      {t:"Forecasts resource needs", d:"Plans ahead for future resourcing requirements."}]},
+    {s:"Manages budget and capital allocation for a division or business unit.", i:[
+      {t:"Owns divisional budget", d:"Is accountable for the division's financial resources."},
+      {t:"Allocates capital across teams", d:"Directs investment within the division."},
+      {t:"Forecasts divisional resource needs", d:"Plans resourcing for the division's future."}]},
+    {s:"Stewards enterprise capital and resource allocation.", i:[
+      {t:"Owns capital allocation decisions", d:"Decides how company capital is invested."},
+      {t:"Oversees company-wide budget", d:"Is accountable for the entire company's spend."},
+      {t:"Balances investment vs returns", d:"Weighs spending decisions against expected value."}]},
+    {s:"Provides fiduciary oversight of the organization's capital and resource stewardship.", i:[
+      {t:"Exercises fiduciary oversight", d:"Ensures resources are used responsibly at the highest level."},
+      {t:"Reviews major capital decisions", d:"Evaluates significant investment and spending choices."},
+      {t:"Safeguards long-term financial health", d:"Protects the organization's financial sustainability."}]}
+  ]
+}
+};
+
+let currentLevel = 0;
+let expandedCard = null;
+
+function renderLadder(){
+  const ladder = document.getElementById('ladder');
+  ladder.innerHTML = '';
+  LEVELS.forEach(lvl => {
+    const rung = document.createElement('div');
+    rung.className = 'rung' + (lvl.id === currentLevel ? ' active' : '');
+    rung.onclick = () => { currentLevel = lvl.id; expandedCard = null; render(); };
+    rung.innerHTML = `
+      <div class="rung-node">${lvl.short}</div>
+      <div class="rung-copy">
+        <div class="rung-name">${lvl.name}</div>
+      </div>`;
+    ladder.appendChild(rung);
+  });
+}
+
+function renderContent(){
+  const lvl = LEVELS[currentLevel];
+  document.getElementById('levelKicker').textContent = `Level ${lvl.id + 1} of ${LEVELS.length}`;
+  document.getElementById('levelName').textContent = lvl.name;
+  document.getElementById('levelTagline').textContent = lvl.tag;
+
+  const container = document.getElementById('categories');
+  container.innerHTML = '';
+
+  Object.entries(DATA).forEach(([categoryName, competencies]) => {
+    const section = document.createElement('div');
+    section.className = 'category';
+
+    const names = Object.keys(competencies);
+    section.innerHTML = `
+      <div class="category-head">
+        <div class="category-title">${categoryName}</div>
+        <div class="category-count">${names.length} competencies</div>
+      </div>
+      <div class="grid"></div>`;
+
+    const grid = section.querySelector('.grid');
+    names.forEach(name => {
+      const cardId = categoryName + '::' + name;
+      const entry = competencies[name][currentLevel];
+      const isExpanded = expandedCard === cardId;
+
+      const card = document.createElement('div');
+      card.className = 'card' + (isExpanded ? ' expanded' : '');
+
+      let segs = '';
+      for(let i=0;i<LEVELS.length;i++){
+        segs += `<div class="seg ${i <= currentLevel ? 'filled' : ''}"></div>`;
+      }
+
+      const detailItems = entry.i.map(ind => `
+        <div class="detail-item">
+          <div class="detail-label">${ind.t}</div>
+          <div class="detail-desc">${ind.d}</div>
+        </div>`).join('');
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-name">${name}</div>
+          <div class="chevron">▾</div>
+        </div>
+        <div class="progress-track">${segs}</div>
+        <div class="card-statement">${entry.s}</div>
+        <ul class="indicators">${entry.i.map(x => `<li>${x.t}</li>`).join('')}</ul>
+        <div class="details">${detailItems}</div>
+        ${isExpanded ? '' : '<div class="hint">Click for behavioral detail →</div>'}`;
+
+      card.onclick = () => {
+        expandedCard = isExpanded ? null : cardId;
+        render();
+      };
+
+      grid.appendChild(card);
+    });
+
+    container.appendChild(section);
+  });
+}
+
+function render(){
+  renderLadder();
+  renderContent();
+}
+
+render();
+</script>
+</body>
+</html>
